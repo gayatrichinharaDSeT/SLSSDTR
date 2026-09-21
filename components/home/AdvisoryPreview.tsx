@@ -18,7 +18,7 @@ export default function AdvisoryPreview() {
           {advisoryBoard.map((member) => (
             <div
               key={member.name}
-              className="flex flex-col items-center gap-3 rounded-card border border-navy/10 bg-white p-6 text-center shadow-sm"
+              className="flex flex-col items-center gap-3 rounded-card border border-navy/10 bg-white p-6 text-center shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5"
             >
               <span className="flex h-14 w-14 items-center justify-center rounded-full bg-blue/10 font-heading text-base font-bold text-blue">
                 {member.initials}

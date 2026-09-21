@@ -76,7 +76,7 @@ export default function StrategicAlignment() {
                   y1="50%"
                   x2={pos.left}
                   y2={pos.top}
-                  stroke="#30609C"
+                  stroke="#2F5F9B"
                   strokeOpacity="0.25"
                   strokeWidth="1.5"
                   strokeDasharray="3 5"
@@ -99,7 +99,7 @@ export default function StrategicAlignment() {
                 className="absolute w-48 -translate-x-1/2 -translate-y-1/2"
                 style={pos}
               >
-                <div className="flex flex-col items-center gap-2 rounded-card border border-navy/10 bg-white p-4 text-center shadow-sm">
+                <div className="flex flex-col items-center gap-2 rounded-card border border-navy/10 bg-white p-4 text-center shadow-sm transition-transform duration-200 hover:-translate-y-1">
                   <span className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-mist text-green">
                     <Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
                   </span>
@@ -121,7 +121,7 @@ export default function StrategicAlignment() {
           {clusters.map(({ icon: Icon, label, items }) => (
             <div
               key={label}
-              className="flex flex-col gap-2 rounded-card border border-navy/10 bg-white p-5"
+              className="flex flex-col gap-2 rounded-card border border-navy/10 bg-white p-5 transition-transform duration-200 hover:-translate-y-1"
             >
               <span className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-mist text-green">
                 <Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />

@@ -24,7 +24,7 @@ export default function IndustryConnect() {
           {industryAreas.map((area) => (
             <li
               key={area}
-              className="rounded-card border border-navy/10 bg-grey px-4 py-3 text-sm font-semibold font-heading text-navy"
+              className="rounded-card border border-navy/10 bg-grey px-4 py-3 text-sm font-semibold font-heading text-navy transition-all duration-200 hover:-translate-y-0.5 hover:border-green/40 hover:bg-mist"
             >
               {area}
             </li>

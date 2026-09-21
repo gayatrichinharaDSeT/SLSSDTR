@@ -19,6 +19,8 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import Badge from "@/components/ui/Badge";
 import IconBox from "@/components/ui/IconBox";
 import Button from "@/components/ui/Button";
+import Reveal from "@/components/ui/Reveal";
+import LearningResearchVisual from "@/components/graphics/LearningResearchVisual";
 import { learningHighlights, learningModels, infrastructureItems, researchInnovation } from "@/data/content";
 
 export const metadata: Metadata = {
@@ -61,6 +63,7 @@ export default function LearningResearchPage() {
         eyebrow="LEARNING & RESEARCH"
         title="Learning Approach"
         description="SLSSDTR brings together practical learning infrastructure with applied research and innovation support, so learning stays grounded in real practice and open to what comes next."
+        visual={<LearningResearchVisual />}
       />
 
       {/* Learning Approach */}
@@ -75,7 +78,7 @@ export default function LearningResearchPage() {
           <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-center">
             {stages.map((stage, index) => (
               <div key={stage.title} className="flex items-center gap-4">
-                <div className="flex flex-col items-center gap-2 rounded-card border border-navy/10 bg-white p-5 text-center shadow-sm sm:w-44">
+                <div className="flex flex-col items-center gap-2 rounded-card border border-navy/10 bg-white p-5 text-center shadow-sm transition-transform duration-200 hover:-translate-y-1 sm:w-44">
                   <span className="font-heading text-lg font-bold text-navy">{stage.title}</span>
                   <span className="text-xs leading-snug text-ink">{stage.description}</span>
                 </div>
@@ -129,7 +132,7 @@ export default function LearningResearchPage() {
               return (
                 <div
                   key={item}
-                  className="flex flex-col items-start gap-3 rounded-card border border-navy/10 bg-white p-5 transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-md"
+                  className="group flex flex-col items-start gap-3 rounded-card border border-navy/10 bg-white p-5 transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5"
                 >
                   <IconBox icon={Icon} tone="green" size="sm" />
                   <h3 className="font-heading text-sm font-bold leading-snug text-navy">{item}</h3>
@@ -170,8 +173,17 @@ export default function LearningResearchPage() {
       </section>
 
       {/* Research & Innovation */}
-      <section className="bg-navy py-16 text-white sm:py-20 lg:py-24">
-        <Container className="flex flex-col gap-12">
+      <section className="relative overflow-hidden bg-gradient-to-br from-navy to-navy-dark py-16 text-white sm:py-20 lg:py-24">
+        <div
+          className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 animate-glow-pulse rounded-full bg-blue/20 blur-3xl"
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-green/20 blur-3xl"
+          aria-hidden="true"
+        />
+
+        <Container className="relative flex flex-col gap-12">
           <SectionHeading
             eyebrow="Research & Innovation"
             title="Research & Innovation"
@@ -180,19 +192,18 @@ export default function LearningResearchPage() {
           />
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {researchInnovation.map(({ icon: Icon, label }) => (
-              <div
-                key={label}
-                className="flex items-center gap-4 rounded-card border border-white/15 bg-white/5 p-5 transition-all duration-200 hover:-translate-y-1 hover:border-green/50 hover:bg-white/10"
-              >
-                <span
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] bg-white/10 text-white"
-                  aria-hidden="true"
-                >
-                  <Icon className="h-5 w-5" strokeWidth={1.75} />
-                </span>
-                <h3 className="font-heading text-sm font-bold leading-snug text-white">{label}</h3>
-              </div>
+            {researchInnovation.map(({ icon: Icon, label }, index) => (
+              <Reveal key={label} delay={index * 80}>
+                <div className="group flex items-center gap-4 rounded-card border border-white/15 bg-white/5 p-5 transition-all duration-200 hover:-translate-y-1 hover:border-green/50 hover:bg-white/10">
+                  <span
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] bg-white/10 text-white transition-transform duration-300 ease-out group-hover:scale-110 group-hover:bg-green/30"
+                    aria-hidden="true"
+                  >
+                    <Icon className="h-5 w-5" strokeWidth={1.75} />
+                  </span>
+                  <h3 className="font-heading text-sm font-bold leading-snug text-white">{label}</h3>
+                </div>
+              </Reveal>
             ))}
           </div>
         </Container>

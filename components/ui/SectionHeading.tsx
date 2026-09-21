@@ -1,3 +1,5 @@
+import Reveal from "@/components/ui/Reveal";
+
 type SectionHeadingProps = {
   eyebrow?: string;
   title: string;
@@ -21,7 +23,7 @@ export default function SectionHeading({
   const eyebrowColor = tone === "dark" ? "text-yellow" : "text-green";
 
   return (
-    <div className={`flex flex-col gap-3 ${alignClasses} ${className}`}>
+    <Reveal className={`flex flex-col gap-3 ${alignClasses} ${className}`}>
       {eyebrow ? (
         <span className={`inline-flex items-center gap-2 text-xs font-semibold tracking-wide font-heading ${eyebrowColor}`}>
           <span className="h-1.5 w-1.5 rounded-full bg-yellow" aria-hidden="true" />
@@ -34,6 +36,6 @@ export default function SectionHeading({
       {description ? (
         <p className={`max-w-2xl text-base sm:text-lg ${descColor}`}>{description}</p>
       ) : null}
-    </div>
+    </Reveal>
   );
 }

@@ -4,6 +4,8 @@ import PageHero from "@/components/ui/PageHero";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Badge from "@/components/ui/Badge";
 import ProgramCard from "@/components/home/ProgramCard";
+import FinalCTA from "@/components/home/FinalCTA";
+import ProgramsVisual from "@/components/graphics/ProgramsVisual";
 import { programs } from "@/data/programs";
 import { learningModels } from "@/data/content";
 
@@ -20,6 +22,7 @@ export default function ProgramsPage() {
         eyebrow="PROGRAMS"
         title="Programs Designed for Transformation"
         description="Practical, industry-aligned programs for students, faculty, entrepreneurs and trainers across the life sciences ecosystem."
+        visual={<ProgramsVisual />}
       />
 
       <section className="bg-white py-16 sm:py-20">
@@ -46,7 +49,7 @@ export default function ProgramsPage() {
           />
 
           <div className="grid gap-6 sm:grid-cols-2">
-            <div className="rounded-card border border-navy/10 bg-white p-7">
+            <div className="rounded-card border border-navy/10 bg-white p-7 transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5">
               <h3 className="font-heading text-lg font-bold text-navy">
                 Learning Structure
               </h3>
@@ -55,7 +58,7 @@ export default function ProgramsPage() {
                 to fit around professional and academic commitments.
               </p>
             </div>
-            <div className="rounded-card border border-navy/10 bg-white p-7">
+            <div className="rounded-card border border-navy/10 bg-white p-7 transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5">
               <h3 className="font-heading text-lg font-bold text-navy">
                 Delivery Models
               </h3>
@@ -70,6 +73,8 @@ export default function ProgramsPage() {
           </div>
         </Container>
       </section>
+
+      <FinalCTA />
     </>
   );
 }

@@ -40,20 +40,20 @@ export default function AboutPreview() {
             role="img"
             aria-label="Abstract illustration representing academic and scientific collaboration"
           >
-            <circle cx="120" cy="150" r="70" fill="#41835E" fillOpacity="0.12" />
-            <circle cx="280" cy="110" r="90" fill="#30609C" fillOpacity="0.1" />
-            <circle cx="120" cy="150" r="4" fill="#41835E" />
-            <circle cx="280" cy="110" r="4" fill="#30609C" />
-            <circle cx="200" cy="220" r="4" fill="#F6DD34" />
+            <circle cx="120" cy="150" r="70" fill="#2F8C5C" fillOpacity="0.12" />
+            <circle cx="280" cy="110" r="90" fill="#2F5F9B" fillOpacity="0.1" />
+            <circle cx="120" cy="150" r="4" fill="#2F8C5C" />
+            <circle cx="280" cy="110" r="4" fill="#2F5F9B" />
+            <circle cx="200" cy="220" r="4" fill="#F6CE2E" />
             <path
               d="M120 150 L280 110 L200 220 Z"
               fill="none"
-              stroke="#2A3351"
+              stroke="#212B4D"
               strokeOpacity="0.25"
               strokeWidth="1.5"
             />
-            <circle cx="120" cy="150" r="30" fill="none" stroke="#41835E" strokeOpacity="0.3" strokeWidth="1" />
-            <circle cx="280" cy="110" r="34" fill="none" stroke="#30609C" strokeOpacity="0.3" strokeWidth="1" />
+            <circle cx="120" cy="150" r="30" fill="none" stroke="#2F8C5C" strokeOpacity="0.3" strokeWidth="1" />
+            <circle cx="280" cy="110" r="34" fill="none" stroke="#2F5F9B" strokeOpacity="0.3" strokeWidth="1" />
           </svg>
         </div>
       </Container>

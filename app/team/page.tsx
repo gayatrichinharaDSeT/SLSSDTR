@@ -20,6 +20,7 @@ export default function TeamPage() {
         eyebrow="TEAM"
         title="The People Behind SLSSDTR"
         description="A founding team and advisory board bringing decades of entrepreneurial, operational and industry experience to life sciences skill development."
+        align="center"
       />
 
       <section className="bg-white py-16 sm:py-20">
@@ -29,7 +30,7 @@ export default function TeamPage() {
             {foundingTeam.map((member) => (
               <div
                 key={member.name}
-                className="flex flex-col gap-4 rounded-card border border-navy/10 bg-white p-7 shadow-sm sm:flex-row sm:items-start"
+                className="flex flex-col gap-4 rounded-card border border-navy/10 bg-white p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5 sm:flex-row sm:items-start"
               >
                 <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-navy font-heading text-lg font-bold text-white">
                   {member.initials}
@@ -65,7 +66,7 @@ export default function TeamPage() {
             {advisoryBoard.map((member) => (
               <div
                 key={member.name}
-                className="flex flex-col items-center gap-3 rounded-card border border-navy/10 bg-white p-6 text-center shadow-sm"
+                className="flex flex-col items-center gap-3 rounded-card border border-navy/10 bg-white p-6 text-center shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5"
               >
                 <span className="flex h-14 w-14 items-center justify-center rounded-full bg-blue/10 font-heading text-base font-bold text-blue">
                   {member.initials}
@@ -108,18 +109,10 @@ export default function TeamPage() {
             Explore What SLSSDTR Has to Offer
           </h2>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Button
-              href="/programs"
-              variant="primary"
-              className="bg-white text-navy hover:bg-yellow hover:text-navy"
-            >
+            <Button href="/programs" variant="inverse">
               Explore Programs
             </Button>
-            <Button
-              href="/contact"
-              variant="secondary"
-              className="border-white text-white hover:bg-white hover:text-navy"
-            >
+            <Button href="/contact" variant="inverseOutline">
               Contact Us
             </Button>
           </div>

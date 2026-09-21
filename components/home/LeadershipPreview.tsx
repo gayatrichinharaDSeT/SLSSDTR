@@ -18,7 +18,7 @@ export default function LeadershipPreview() {
           {foundingTeam.map((member) => (
             <div
               key={member.name}
-              className="flex flex-col gap-4 rounded-card border border-navy/10 bg-white p-7 shadow-sm sm:flex-row sm:items-start"
+              className="flex flex-col gap-4 rounded-card border border-navy/10 bg-white p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5 sm:flex-row sm:items-start"
             >
               <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-navy font-heading text-lg font-bold text-white">
                 {member.initials}

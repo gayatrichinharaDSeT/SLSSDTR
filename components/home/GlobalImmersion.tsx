@@ -23,7 +23,7 @@ export default function GlobalImmersion() {
             {immersionLocations.map((location) => (
               <li
                 key={location.city}
-                className="flex items-center gap-2 rounded-full border border-navy/10 bg-white px-4 py-2 text-sm font-semibold font-heading text-navy"
+                className="flex items-center gap-2 rounded-full border border-navy/10 bg-white px-4 py-2 text-sm font-semibold font-heading text-navy transition-all duration-200 hover:-translate-y-0.5 hover:border-green/40 hover:bg-mist"
               >
                 <MapPin className="h-4 w-4 text-green" strokeWidth={1.75} aria-hidden="true" />
                 {location.city}

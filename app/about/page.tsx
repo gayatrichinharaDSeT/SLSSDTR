@@ -81,17 +81,17 @@ export default function AboutPage() {
 
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-mist">
             <svg viewBox="0 0 400 300" className="h-full w-full" aria-hidden="true">
-              <line x1="200" y1="150" x2="90" y2="80" stroke="#2A3351" strokeOpacity="0.2" strokeWidth="1.5" />
-              <line x1="200" y1="150" x2="320" y2="70" stroke="#2A3351" strokeOpacity="0.2" strokeWidth="1.5" />
-              <line x1="200" y1="150" x2="80" y2="220" stroke="#2A3351" strokeOpacity="0.2" strokeWidth="1.5" />
-              <line x1="200" y1="150" x2="330" y2="230" stroke="#2A3351" strokeOpacity="0.2" strokeWidth="1.5" />
-              <circle cx="200" cy="60" r="44" fill="none" stroke="#41835E" strokeOpacity="0.15" strokeWidth="1" />
-              <circle cx="90" cy="80" r="20" fill="#41835E" fillOpacity="0.85" />
-              <circle cx="320" cy="70" r="16" fill="#30609C" fillOpacity="0.85" />
-              <circle cx="80" cy="220" r="16" fill="#30609C" fillOpacity="0.85" />
-              <circle cx="330" cy="230" r="20" fill="#41835E" fillOpacity="0.85" />
-              <circle cx="200" cy="150" r="34" fill="#2A3351" />
-              <circle cx="200" cy="150" r="4" fill="#F6DD34" />
+              <line x1="200" y1="150" x2="90" y2="80" stroke="#212B4D" strokeOpacity="0.2" strokeWidth="1.5" />
+              <line x1="200" y1="150" x2="320" y2="70" stroke="#212B4D" strokeOpacity="0.2" strokeWidth="1.5" />
+              <line x1="200" y1="150" x2="80" y2="220" stroke="#212B4D" strokeOpacity="0.2" strokeWidth="1.5" />
+              <line x1="200" y1="150" x2="330" y2="230" stroke="#212B4D" strokeOpacity="0.2" strokeWidth="1.5" />
+              <circle cx="200" cy="60" r="44" fill="none" stroke="#2F8C5C" strokeOpacity="0.15" strokeWidth="1" />
+              <circle cx="90" cy="80" r="20" fill="#2F8C5C" fillOpacity="0.85" />
+              <circle cx="320" cy="70" r="16" fill="#2F5F9B" fillOpacity="0.85" />
+              <circle cx="80" cy="220" r="16" fill="#2F5F9B" fillOpacity="0.85" />
+              <circle cx="330" cy="230" r="20" fill="#2F8C5C" fillOpacity="0.85" />
+              <circle cx="200" cy="150" r="34" fill="#212B4D" />
+              <circle cx="200" cy="150" r="4" fill="#F6CE2E" />
             </svg>
           </div>
         </Container>
@@ -108,7 +108,7 @@ export default function AboutPage() {
           />
 
           <div className="grid gap-6 md:grid-cols-2">
-            <div className="flex flex-col gap-4 rounded-card border border-navy/10 bg-white p-8 shadow-sm">
+            <div className="group flex flex-col gap-4 rounded-card border border-navy/10 bg-white p-8 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5">
               <IconBox icon={Target} tone="green" />
               <h3 className="font-heading text-sm font-semibold uppercase tracking-wide text-green-dark">
                 Our Mission
@@ -119,7 +119,7 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="flex flex-col gap-4 rounded-card border border-navy/10 bg-white p-8 shadow-sm">
+            <div className="group flex flex-col gap-4 rounded-card border border-navy/10 bg-white p-8 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5">
               <IconBox icon={Eye} tone="blue" />
               <h3 className="font-heading text-sm font-semibold uppercase tracking-wide text-blue">
                 Our Vision
@@ -147,7 +147,7 @@ export default function AboutPage() {
             {coreValues.map(({ icon, title, description }) => (
               <div
                 key={title}
-                className="flex flex-col gap-4 rounded-card border border-navy/10 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-md"
+                className="group flex flex-col gap-4 rounded-card border border-navy/10 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5"
               >
                 <IconBox icon={icon} tone="green" />
                 <h3 className="font-heading text-xl font-bold text-navy">{title}</h3>
@@ -171,7 +171,7 @@ export default function AboutPage() {
             {learningPhilosophyPoints.map((point) => (
               <div
                 key={point}
-                className="flex items-center gap-3 rounded-card border border-navy/10 bg-white p-5"
+                className="group flex items-center gap-3 rounded-card border border-navy/10 bg-white p-5 transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5"
               >
                 <IconBox icon={CheckCircle2} tone="green" size="sm" />
                 <span className="font-heading text-sm font-semibold text-navy">
@@ -198,7 +198,7 @@ export default function AboutPage() {
             {industryAreas.map(({ icon, label }) => (
               <div
                 key={label}
-                className="flex flex-col items-start gap-3 rounded-card border border-navy/10 bg-white p-5 transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-md"
+                className="group flex flex-col items-start gap-3 rounded-card border border-navy/10 bg-white p-5 transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5"
               >
                 <IconBox icon={icon} tone="blue" size="sm" />
                 <span className="font-heading text-sm font-semibold text-navy">

@@ -11,7 +11,6 @@ import IndustryConnect from "@/components/home/IndustryConnect";
 import GlobalImmersion from "@/components/home/GlobalImmersion";
 import LeadershipPreview from "@/components/home/LeadershipPreview";
 import AdvisoryPreview from "@/components/home/AdvisoryPreview";
-import FinalCTA from "@/components/home/FinalCTA";
 
 export default function Home() {
   return (
@@ -29,7 +28,6 @@ export default function Home() {
       <GlobalImmersion />
       <LeadershipPreview />
       <AdvisoryPreview />
-      <FinalCTA />
     </>
   );
 }
