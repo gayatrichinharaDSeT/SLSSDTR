@@ -5,6 +5,7 @@ import PageHero from "@/components/ui/PageHero";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
+import EnquireButton from "@/components/programs/EnquireButton";
 import type { Program } from "@/data/programs";
 
 type ProgramDetailProps = {
@@ -119,8 +120,11 @@ export default function ProgramDetail({ program, children }: ProgramDetailProps)
               to get involved.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Button href="/contact">Contact Us</Button>
-              <Button href="/programs" variant="secondary">
+              <EnquireButton programId={program.slug} programName={program.name} />
+              <Button href="/contact" variant="secondary">
+                Contact Us
+              </Button>
+              <Button href="/programs" variant="ghost">
                 View All Programs
               </Button>
             </div>

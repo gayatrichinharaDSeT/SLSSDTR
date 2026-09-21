@@ -73,6 +73,8 @@ export default function LearningResearchPage() {
             eyebrow="How We Teach"
             title="Learn. Practice. Apply. Transform."
             description="Every program moves through the same arc — from structured foundations to hands-on practice to real application — so learning translates into capability that lasts."
+            align="center"
+            className="mx-auto max-w-2xl"
           />
 
           <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-center">

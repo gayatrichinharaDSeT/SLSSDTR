@@ -7,6 +7,7 @@ type BaseProps = {
   children: ReactNode;
   variant?: ButtonVariant;
   className?: string;
+  onClick?: () => void;
 };
 
 type ButtonAsLink = BaseProps & {
@@ -46,19 +47,20 @@ export default function Button({
   className = "",
   href,
   type,
+  onClick,
 }: ButtonProps) {
   const classes = `${baseClasses} ${variantClasses[variant]} ${className}`;
 
   if (href) {
     return (
-      <Link href={href} className={classes}>
+      <Link href={href} className={classes} onClick={onClick}>
         {children}
       </Link>
     );
   }
 
   return (
-    <button type={type ?? "button"} className={classes}>
+    <button type={type ?? "button"} className={classes} onClick={onClick}>
       {children}
     </button>
   );

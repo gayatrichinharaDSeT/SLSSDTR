@@ -1,6 +1,9 @@
-import Link from "next/link";
+"use client";
+
+import { useState } from "react";
 import { ArrowRight, Star } from "lucide-react";
 import Badge from "@/components/ui/Badge";
+import ProgramLeadModal from "@/components/programs/ProgramLeadModal";
 import type { Program } from "@/data/programs";
 
 type ProgramCardProps = {
@@ -8,6 +11,8 @@ type ProgramCardProps = {
 };
 
 export default function ProgramCard({ program }: ProgramCardProps) {
+  const [leadModalOpen, setLeadModalOpen] = useState(false);
+
   return (
     <div
       className={`group flex h-full flex-col gap-5 rounded-card border bg-white p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-navy/5 ${
@@ -35,13 +40,22 @@ export default function ProgramCard({ program }: ProgramCardProps) {
         ))}
       </ul>
 
-      <Link
-        href={`/programs/${program.slug}`}
+      <button
+        type="button"
+        onClick={() => setLeadModalOpen(true)}
         className="mt-auto inline-flex items-center gap-1.5 text-sm font-semibold font-heading text-green transition-colors group-hover:text-green-dark"
       >
         Explore Program
         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-      </Link>
+      </button>
+
+      {leadModalOpen ? (
+        <ProgramLeadModal
+          programId={program.slug}
+          programName={program.name}
+          onClose={() => setLeadModalOpen(false)}
+        />
+      ) : null}
     </div>
   );
 }

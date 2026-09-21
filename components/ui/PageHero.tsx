@@ -23,7 +23,7 @@ export default function PageHero({
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-mist/60 via-white to-white">
       <Container
-        className={`grid items-center gap-10 py-16 sm:py-20 lg:py-24 ${
+        className={`grid items-center gap-10 pt-10 pb-6 sm:pt-14 sm:pb-8 lg:pt-16 lg:pb-10 ${
           visual ? "lg:grid-cols-[1.1fr_0.9fr] lg:gap-16" : ""
         }`}
       >

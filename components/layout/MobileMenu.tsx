@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import type { NavLink } from "@/data/navigation";
+import { useSession } from "@/lib/auth-client";
 
 type MobileMenuProps = {
   links: NavLink[];
@@ -13,7 +14,11 @@ type MobileMenuProps = {
 export default function MobileMenu({ links }: MobileMenuProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const { data: session } = useSession();
   const [lastPathname, setLastPathname] = useState(pathname);
+  // See components/layout/AuthNavLink.tsx — same first-deployment gate.
+  const showAdminLink =
+    session?.user.role === "ADMIN" && process.env.NEXT_PUBLIC_ADMIN_PANEL_ENABLED === "true";
 
   if (pathname !== lastPathname) {
     setLastPathname(pathname);
@@ -64,7 +69,13 @@ export default function MobileMenu({ links }: MobileMenuProps) {
               );
             })}
           </ul>
-          <div className="border-t border-navy/10 px-5 py-4">
+          <div className="flex flex-col gap-3 border-t border-navy/10 px-5 py-4">
+            <Link
+              href={session ? (showAdminLink ? "/admin" : "/dashboard") : "/login"}
+              className="flex w-full items-center justify-center rounded-btn border border-navy/15 px-6 py-3 text-sm font-semibold font-heading text-navy"
+            >
+              {session ? (showAdminLink ? "Admin" : "Dashboard") : "Sign In"}
+            </Link>
             <Link
               href="/programs"
               className="flex w-full items-center justify-center rounded-btn bg-navy px-6 py-3 text-sm font-semibold font-heading text-white"

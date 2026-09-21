@@ -25,7 +25,12 @@ export default function TeamPage() {
 
       <section className="bg-white py-16 sm:py-20">
         <Container className="flex flex-col gap-12">
-          <SectionHeading eyebrow="Founding Team" title="Founding Team" />
+          <SectionHeading
+            eyebrow="Founding Team"
+            title="Founding Team"
+            align="center"
+            className="mx-auto max-w-2xl"
+          />
           <div className="grid gap-6 sm:grid-cols-2">
             {foundingTeam.map((member) => (
               <div
@@ -60,6 +65,8 @@ export default function TeamPage() {
             eyebrow="Advisory Board"
             title="Advisory Board"
             description="Advising SLSSDTR across areas including pharma innovation, African markets, business transformation, data analytics, healthcare strategy, MedTech, clinical integration and digital transformation."
+            align="center"
+            className="mx-auto max-w-2xl"
           />
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -93,7 +100,12 @@ export default function TeamPage() {
 
       <section className="bg-white py-16 sm:py-20">
         <Container>
-          <SectionHeading eyebrow="Chief Convenors" title="Chief Convenors" className="mb-8" />
+          <SectionHeading
+            eyebrow="Chief Convenors"
+            title="Chief Convenors"
+            align="center"
+            className="mx-auto mb-8 max-w-2xl"
+          />
           <div className="flex flex-col items-start gap-4 rounded-card border border-navy/10 bg-grey p-8 sm:flex-row sm:items-center">
             <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[10px] bg-mist text-green">
               <Hourglass className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />

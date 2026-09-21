@@ -1,99 +1,153 @@
-// SLSSDTR — future database schema (PostgreSQL via Prisma)
+// SLSSDTR — backend foundation schema (PostgreSQL via Prisma 7)
 //
-// This schema is not yet wired into the application. It documents the
-// planned data model so the current frontend prototype can be connected
-// to a real database later without redesigning the architecture.
-//
-// To activate:
-//   1. npm install prisma @prisma/client
-//   2. Set DATABASE_URL in .env (PostgreSQL connection string)
-//   3. npx prisma migrate dev --name init
-//   4. Add lib/prisma.ts as a PrismaClient singleton and use it from
-//      Server Actions / Route Handlers (e.g. app/api/contact/route.ts).
+// Scope for this phase: authentication (Better Auth) + contact messages +
+// program enquiries. Deliberately excludes LMS/course/payment models —
+// see the ProgramEnquiry.programId comment for how those attach later
+// without a schema rewrite.
 
 generator client {
   provider = "prisma-client-js"
 }
 
+// Prisma 7: the connection URL lives in prisma.config.ts (for the CLI) and
+// in the @prisma/adapter-pg adapter passed to PrismaClient (for the app) —
+// not here. See prisma.config.ts and lib/prisma.ts.
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+}
+
+// USER/ADMIN cover this phase. Future values such as STUDENT, FACULTY,
+// TRAINER, ENTREPRENEUR, SUPER_ADMIN can be appended to this enum later
+// without a migration that touches existing rows.
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ContactStatus {
+  NEW
+  READ
+  IN_PROGRESS
+  RESOLVED
+}
+
+enum EnquiryStatus {
+  NEW
+  IN_PROGRESS
+  RESOLVED
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  role      String   @default("student")
-  createdAt DateTime @default(now())
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  phone         String?
+  organization  String?
+  role          Role     @default(USER)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  applications Application[]
-  enquiries    ProgramEnquiry[]
+  sessions         Session[]
+  accounts         Account[]
+  programEnquiries ProgramEnquiry[]
+
+  @@map("user")
 }
 
-model Program {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  name        String
-  summary     String
-  createdAt   DateTime @default(now())
+// Better Auth's required session model.
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  enquiries    ProgramEnquiry[]
-  applications Application[]
-  courses      Course[]
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
 }
 
-model ProgramEnquiry {
-  id        String   @id @default(cuid())
-  name      String
-  email     String
-  phone     String?
-  interest  String?
-  message   String
-  createdAt DateTime @default(now())
+// Better Auth's required account model (stores the email/password
+// credential as one "account" row per user, and would also hold OAuth
+// provider tokens if a social provider is added later).
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
-  program   Program? @relation(fields: [programId], references: [id])
-  programId String?
-  user      User?    @relation(fields: [userId], references: [id])
-  userId    String?
+  @@map("account")
+}
+
+// Better Auth's required verification model — backs both email
+// verification and password reset tokens.
+model Verification {
+  id         String    @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@map("verification")
 }
 
 model ContactMessage {
-  id           String   @id @default(cuid())
+  id           String        @id @default(cuid())
   name         String
   email        String
   phone        String?
   organization String?
   interest     String?
   message      String
-  createdAt    DateTime @default(now())
+  status       ContactStatus @default(NEW)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("contact_message")
 }
 
-model Application {
-  id        String   @id @default(cuid())
-  status    String   @default("submitted")
-  createdAt DateTime @default(now())
+// programId stores the stable slug from data/programs.ts (e.g.
+// "student-ai"), not a foreign key — programs stay static content for
+// this phase. A future Program table/CMS can adopt the same string as
+// its primary key without touching existing ProgramEnquiry rows.
+model ProgramEnquiry {
+  id           String        @id @default(cuid())
+  programId    String
+  name         String
+  email        String
+  phone        String?
+  organization String?
+  message      String
+  status       EnquiryStatus @default(NEW)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 
-  user      User    @relation(fields: [userId], references: [id])
-  userId    String
-  program   Program @relation(fields: [programId], references: [id])
-  programId String
-}
+  // Nullable: guest visitors can submit enquiries without an account.
+  // SetNull (not Cascade) so deleting a user never deletes the business
+  // record of their enquiry.
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
 
-model Course {
-  id        String   @id @default(cuid())
-  title     String
-  hours     Int?
-  createdAt DateTime @default(now())
-
-  program   Program @relation(fields: [programId], references: [id])
-  programId String
-}
-
-model Trainer {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  bio       String?
-  createdAt DateTime @default(now())
+  @@index([userId])
+  @@index([programId])
+  @@index([status])
+  @@map("program_enquiry")
 }

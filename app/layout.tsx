@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: "SLSSDTR | School of Life Science – Skill Development, Training & Research",
   description:
     "SLSSDTR bridges academia and industry through industry-aligned skill development, training, research and AI transformation programs for the life sciences ecosystem.",
-  metadataBase: new URL("http://localhost:3000"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

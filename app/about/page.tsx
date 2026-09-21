@@ -18,6 +18,7 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import IconBox from "@/components/ui/IconBox";
 import LeadershipPreview from "@/components/home/LeadershipPreview";
 import FinalCTA from "@/components/home/FinalCTA";
+import AboutVisual from "@/components/graphics/AboutVisual";
 import { aboutFeaturePoints, coreValues } from "@/data/values";
 
 export const metadata: Metadata = {
@@ -55,6 +56,7 @@ export default function AboutPage() {
         eyebrow="ABOUT"
         title="Bridging Academia & Industry"
         description="SLSSDTR is dedicated to skill development, training, research and industry alignment — preparing learners across the life sciences ecosystem to lead with confidence in a rapidly evolving, technology-driven world."
+        visual={<AboutVisual />}
       />
 
       {/* About SLSSDTR */}
