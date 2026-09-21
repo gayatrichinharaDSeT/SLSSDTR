@@ -1,0 +1,99 @@
+// SLSSDTR — future database schema (PostgreSQL via Prisma)
+//
+// This schema is not yet wired into the application. It documents the
+// planned data model so the current frontend prototype can be connected
+// to a real database later without redesigning the architecture.
+//
+// To activate:
+//   1. npm install prisma @prisma/client
+//   2. Set DATABASE_URL in .env (PostgreSQL connection string)
+//   3. npx prisma migrate dev --name init
+//   4. Add lib/prisma.ts as a PrismaClient singleton and use it from
+//      Server Actions / Route Handlers (e.g. app/api/contact/route.ts).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  role      String   @default("student")
+  createdAt DateTime @default(now())
+
+  applications Application[]
+  enquiries    ProgramEnquiry[]
+}
+
+model Program {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  summary     String
+  createdAt   DateTime @default(now())
+
+  enquiries    ProgramEnquiry[]
+  applications Application[]
+  courses      Course[]
+}
+
+model ProgramEnquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  interest  String?
+  message   String
+  createdAt DateTime @default(now())
+
+  program   Program? @relation(fields: [programId], references: [id])
+  programId String?
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+}
+
+model ContactMessage {
+  id           String   @id @default(cuid())
+  name         String
+  email        String
+  phone        String?
+  organization String?
+  interest     String?
+  message      String
+  createdAt    DateTime @default(now())
+}
+
+model Application {
+  id        String   @id @default(cuid())
+  status    String   @default("submitted")
+  createdAt DateTime @default(now())
+
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+  program   Program @relation(fields: [programId], references: [id])
+  programId String
+}
+
+model Course {
+  id        String   @id @default(cuid())
+  title     String
+  hours     Int?
+  createdAt DateTime @default(now())
+
+  program   Program @relation(fields: [programId], references: [id])
+  programId String
+}
+
+model Trainer {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  bio       String?
+  createdAt DateTime @default(now())
+}
