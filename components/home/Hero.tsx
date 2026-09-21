@@ -2,13 +2,12 @@ import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import HeroVisual from "@/components/graphics/HeroVisual";
 import { site } from "@/data/site";
-import { valueStrip } from "@/data/values";
 
 export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-mist/60 via-white to-white">
-      <Container className="grid items-center gap-12 pt-10 pb-10 sm:pt-14 sm:pb-12 lg:grid-cols-2 lg:pt-16 lg:pb-16">
-        <div className="flex flex-col items-start gap-6">
+      <Container className="grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-2 lg:py-28">
+        <div className="flex animate-fade-up flex-col items-start gap-6 opacity-0">
           <span className="inline-flex items-center gap-2 rounded-full border border-green/25 bg-mist px-4 py-1.5 text-xs font-semibold tracking-wide text-green-dark font-heading">
             {site.eyebrow}
           </span>
@@ -31,18 +30,9 @@ export default function Hero() {
           </div>
         </div>
 
-        <HeroVisual />
-      </Container>
-
-      <Container className="border-t border-navy/10 py-6">
-        <ul className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {valueStrip.map(({ icon: Icon, label }) => (
-            <li key={label} className="flex items-center gap-2.5">
-              <Icon className="h-4 w-4 shrink-0 text-green" strokeWidth={1.75} aria-hidden="true" />
-              <span className="font-heading text-sm font-semibold text-navy">{label}</span>
-            </li>
-          ))}
-        </ul>
+        <div className="animate-fade-up opacity-0 [animation-delay:150ms]">
+          <HeroVisual />
+        </div>
       </Container>
     </section>
   );

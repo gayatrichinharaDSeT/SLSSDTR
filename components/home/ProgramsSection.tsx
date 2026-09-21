@@ -1,6 +1,7 @@
 import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
 import ProgramCard from "@/components/home/ProgramCard";
+import Reveal from "@/components/ui/Reveal";
 import { programs } from "@/data/programs";
 
 export default function ProgramsSection() {
@@ -16,8 +17,10 @@ export default function ProgramsSection() {
         />
 
         <div className="grid gap-6 sm:grid-cols-2">
-          {programs.map((program) => (
-            <ProgramCard key={program.slug} program={program} />
+          {programs.map((program, index) => (
+            <Reveal key={program.slug} delay={index * 100}>
+              <ProgramCard program={program} />
+            </Reveal>
           ))}
         </div>
       </Container>

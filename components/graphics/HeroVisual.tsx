@@ -17,7 +17,7 @@ export default function HeroVisual() {
           cy="200"
           r="180"
           fill="none"
-          stroke="#30609C"
+          stroke="#2F5F9B"
           strokeOpacity="0.15"
           strokeWidth="1"
         />
@@ -26,7 +26,7 @@ export default function HeroVisual() {
           cy="200"
           r="145"
           fill="none"
-          stroke="#41835E"
+          stroke="#2F8C5C"
           strokeOpacity="0.2"
           strokeWidth="1"
           strokeDasharray="4 6"
@@ -36,7 +36,7 @@ export default function HeroVisual() {
           cy="200"
           r="110"
           fill="none"
-          stroke="#2A3351"
+          stroke="#212B4D"
           strokeOpacity="0.12"
           strokeWidth="1"
         />
@@ -45,40 +45,40 @@ export default function HeroVisual() {
           className="animate-orbit-slow"
           style={{ transformBox: "fill-box", transformOrigin: "center" }}
         >
-          <circle cx="200" cy="20" r="6" fill="#41835E" />
-          <circle cx="380" cy="200" r="5" fill="#30609C" />
-          <circle cx="200" cy="380" r="4" fill="#F6DD34" />
+          <circle cx="200" cy="20" r="6" fill="#2F8C5C" />
+          <circle cx="380" cy="200" r="5" fill="#2F5F9B" />
+          <circle cx="200" cy="380" r="4" fill="#F6CE2E" />
         </g>
 
         <g
           className="animate-orbit-slower"
           style={{ transformBox: "fill-box", transformOrigin: "center" }}
         >
-          <circle cx="90" cy="90" r="4" fill="#30609C" />
-          <circle cx="310" cy="110" r="5" fill="#41835E" />
-          <circle cx="90" cy="310" r="4" fill="#2A3351" />
+          <circle cx="90" cy="90" r="4" fill="#2F5F9B" />
+          <circle cx="310" cy="110" r="5" fill="#2F8C5C" />
+          <circle cx="90" cy="310" r="4" fill="#212B4D" />
         </g>
 
         <g transform="translate(140 130)">
           <path
             d="M35 0 H65 V35 L92 105 C97 118 87 130 74 130 H26 C13 130 3 118 8 105 L35 35 Z"
             fill="#FFFFFF"
-            stroke="#2A3351"
+            stroke="#212B4D"
             strokeWidth="4"
             strokeLinejoin="round"
           />
           <path
             d="M18 95 L82 95 L74 115 C71 122 66 125 60 125 H40 C34 125 29 122 26 115 Z"
-            fill="#41835E"
+            fill="#2F8C5C"
             fillOpacity="0.85"
           />
-          <rect x="30" y="0" width="40" height="10" rx="3" fill="#2A3351" />
-          <circle cx="50" cy="72" r="4" fill="#30609C" />
-          <circle cx="38" cy="88" r="3" fill="#F6DD34" />
-          <circle cx="62" cy="90" r="3" fill="#2A3351" />
+          <rect x="30" y="0" width="40" height="10" rx="3" fill="#212B4D" />
+          <circle cx="50" cy="72" r="4" fill="#2F5F9B" />
+          <circle cx="38" cy="88" r="3" fill="#F6CE2E" />
+          <circle cx="62" cy="90" r="3" fill="#212B4D" />
         </g>
 
-        <g stroke="#30609C" strokeOpacity="0.35" strokeWidth="1.5">
+        <g stroke="#2F5F9B" strokeOpacity="0.35" strokeWidth="1.5">
           <line x1="200" y1="200" x2="200" y2="20" strokeDasharray="2 5" />
           <line x1="200" y1="200" x2="380" y2="200" strokeDasharray="2 5" />
         </g>

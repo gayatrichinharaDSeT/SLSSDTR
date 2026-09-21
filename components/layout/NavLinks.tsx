@@ -22,17 +22,17 @@ export default function NavLinks({ links }: NavLinksProps) {
             <Link
               href={link.href}
               aria-current={isActive ? "page" : undefined}
-              className={`relative py-1 text-sm font-semibold font-heading transition-colors duration-200 ${
+              className={`group relative py-1 text-sm font-semibold font-heading transition-colors duration-200 ${
                 isActive ? "text-navy" : "text-ink hover:text-green"
               }`}
             >
               {link.label}
-              {isActive ? (
-                <span
-                  className="absolute -bottom-1 left-0 h-[2px] w-full rounded-full bg-green"
-                  aria-hidden="true"
-                />
-              ) : null}
+              <span
+                className={`absolute -bottom-1 left-0 h-[2px] rounded-full bg-green transition-all duration-300 ease-out ${
+                  isActive ? "w-full" : "w-0 group-hover:w-full"
+                }`}
+                aria-hidden="true"
+              />
             </Link>
           </li>
         );

@@ -10,7 +10,7 @@ type ProgramCardProps = {
 export default function ProgramCard({ program }: ProgramCardProps) {
   return (
     <div
-      className={`group flex flex-col gap-5 rounded-card border bg-white p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${
+      className={`group flex h-full flex-col gap-5 rounded-card border bg-white p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-navy/5 ${
         program.flagship ? "border-green/40" : "border-navy/10 hover:border-green/40"
       }`}
     >

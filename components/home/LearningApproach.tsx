@@ -18,7 +18,7 @@ export default function LearningApproach() {
         <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-center">
           {learningStages.map((stage, index) => (
             <div key={stage.title} className="flex items-center gap-4">
-              <div className="flex flex-col items-center gap-2 rounded-card border border-navy/10 bg-white p-5 text-center sm:w-40">
+              <div className="flex flex-col items-center gap-2 rounded-card border border-navy/10 bg-white p-5 text-center transition-transform duration-200 hover:-translate-y-1 sm:w-40">
                 <span className="font-heading text-lg font-bold text-navy">
                   {stage.title}
                 </span>

@@ -32,7 +32,7 @@ export default function IconBox({
 }: IconBoxProps) {
   return (
     <span
-      className={`inline-flex shrink-0 items-center justify-center rounded-[10px] ${sizeClasses[size]} ${toneClasses[tone]} ${className}`}
+      className={`inline-flex shrink-0 items-center justify-center rounded-[10px] transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-rotate-3 ${sizeClasses[size]} ${toneClasses[tone]} ${className}`}
       aria-hidden="true"
     >
       <Icon className={iconSizeClasses[size]} strokeWidth={1.75} />

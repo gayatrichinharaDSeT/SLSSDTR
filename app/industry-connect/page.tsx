@@ -23,6 +23,7 @@ import PageHero from "@/components/ui/PageHero";
 import SectionHeading from "@/components/ui/SectionHeading";
 import IconBox from "@/components/ui/IconBox";
 import Button from "@/components/ui/Button";
+import IndustryConnectVisual from "@/components/graphics/IndustryConnectVisual";
 import { industryAreas } from "@/data/content";
 
 export const metadata: Metadata = {
@@ -92,6 +93,7 @@ export default function IndustryConnectPage() {
         eyebrow="INDUSTRY CONNECT"
         title="Connecting Learning With Industry"
         description="SLSSDTR connects learning with the industries that shape the life sciences ecosystem — grounding programs in real practice and building bridges between academia and the professionals who work across the field every day."
+        visual={<IndustryConnectVisual />}
       />
 
       {/* Industry Collaboration */}
@@ -101,6 +103,8 @@ export default function IndustryConnectPage() {
             eyebrow="Industry Collaboration"
             title="Industry Collaboration"
             description="SLSSDTR grounds its programs in real industry practice, drawing on the perspectives and needs of the sectors that make up the life sciences ecosystem. This keeps learning relevant, applied and aligned with how the industry actually works."
+            align="center"
+            className="mx-auto max-w-2xl"
           />
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -109,7 +113,7 @@ export default function IndustryConnectPage() {
               return (
                 <div
                   key={area}
-                  className="flex flex-col gap-4 rounded-card border border-navy/10 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-md"
+                  className="group flex flex-col gap-4 rounded-card border border-navy/10 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5"
                 >
                   <IconBox icon={Icon} tone="green" />
                   <h3 className="font-heading text-base font-bold text-navy">{area}</h3>
@@ -170,13 +174,15 @@ export default function IndustryConnectPage() {
             eyebrow="Learning Events"
             title="Seminars, Workshops & Conferences"
             description="SLSSDTR intends to host and participate in seminars, workshops and conferences that connect learners with industry practitioners — creating space for shared knowledge and meaningful networking opportunities."
+            align="center"
+            className="mx-auto max-w-2xl"
           />
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {engagementFormats.map(({ icon, title, description }) => (
               <div
                 key={title}
-                className="flex flex-col gap-4 rounded-card border border-navy/10 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-md"
+                className="group flex flex-col gap-4 rounded-card border border-navy/10 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5"
               >
                 <IconBox icon={icon} />
                 <h3 className="font-heading text-lg font-bold text-navy">{title}</h3>
@@ -202,7 +208,7 @@ export default function IndustryConnectPage() {
             {marketReach.map(({ icon, title, description }) => (
               <div
                 key={title}
-                className="flex flex-col items-center gap-4 rounded-card border border-navy/10 bg-grey p-7 text-center"
+                className="group flex flex-col items-center gap-4 rounded-card border border-navy/10 bg-grey p-7 text-center transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5"
               >
                 <IconBox icon={icon} tone="blue" />
                 <h3 className="font-heading text-lg font-bold text-navy">{title}</h3>
@@ -220,18 +226,18 @@ export default function IndustryConnectPage() {
           viewBox="0 0 400 400"
           aria-hidden="true"
         >
-          <circle cx="200" cy="200" r="180" fill="none" stroke="#41835E" strokeWidth="1" />
+          <circle cx="200" cy="200" r="180" fill="none" stroke="#2F8C5C" strokeWidth="1" />
           <circle
             cx="200"
             cy="200"
             r="130"
             fill="none"
-            stroke="#30609C"
+            stroke="#2F5F9B"
             strokeWidth="1"
             strokeDasharray="4 6"
           />
-          <circle cx="200" cy="20" r="5" fill="#F6DD34" />
-          <circle cx="380" cy="200" r="4" fill="#41835E" />
+          <circle cx="200" cy="20" r="5" fill="#F6CE2E" />
+          <circle cx="380" cy="200" r="4" fill="#2F8C5C" />
         </svg>
 
         <Container className="relative flex flex-col items-center gap-6 text-center">
@@ -243,18 +249,10 @@ export default function IndustryConnectPage() {
             initiatives? We would like to hear from you and explore how we can work together.
           </p>
           <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-            <Button
-              href="/contact"
-              variant="primary"
-              className="bg-white text-navy hover:bg-yellow hover:text-navy"
-            >
+            <Button href="/contact" variant="inverse">
               Partner With Us
             </Button>
-            <Button
-              href="/programs"
-              variant="secondary"
-              className="border-white text-white hover:bg-white hover:text-navy"
-            >
+            <Button href="/programs" variant="inverseOutline">
               Explore Programs
             </Button>
           </div>

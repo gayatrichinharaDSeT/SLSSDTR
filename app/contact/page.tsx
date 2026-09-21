@@ -26,7 +26,7 @@ export default function ContactPage() {
           </div>
 
           <div className="flex flex-col gap-8">
-            <div className="rounded-card border border-navy/10 bg-mist p-7">
+            <div className="rounded-card border border-navy/10 bg-mist p-7 transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5">
               <h2 className="font-heading text-xl font-bold text-navy">
                 Explore What SLSSDTR Offers
               </h2>
@@ -41,7 +41,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="rounded-card border border-navy/10 bg-mist p-7">
+            <div className="rounded-card border border-navy/10 bg-mist p-7 transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5">
               <h2 className="font-heading text-xl font-bold text-navy">
                 Partner With SLSSDTR
               </h2>
