@@ -1,0 +1,16 @@
+# Vercel CLI's direct-upload deploy does NOT automatically honor
+# .gitignore the way `git push`-triggered deploys do — this file is
+# what actually kept a local .env file (with a local-dev-only
+# ADMIN_PANEL_ENABLED=true) out of a previous deploy's bundle. Every
+# env file must be listed explicitly here, not assumed inherited.
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+.git
+.vercel
+node_modules
+.next
