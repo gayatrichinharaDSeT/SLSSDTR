@@ -6,8 +6,8 @@ import { learningStages, learningHighlights, learningModels } from "@/data/conte
 
 export default function LearningApproach() {
   return (
-    <section className="bg-mist py-16 sm:py-20 lg:py-24">
-      <Container className="flex flex-col gap-12">
+    <section className="bg-mist py-14 sm:py-16 lg:py-20">
+      <Container className="flex flex-col gap-10">
         <SectionHeading
           eyebrow="Learning Approach"
           title="Learn. Apply. Transform."

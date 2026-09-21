@@ -20,7 +20,7 @@ export default function ContactPage() {
       />
 
       <section className="bg-white py-16 sm:py-20 lg:py-24">
-        <Container className="grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
+        <Container className="grid items-start gap-12 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
           <div className="rounded-card border border-navy/10 bg-white p-7 shadow-sm sm:p-9">
             <ContactForm />
           </div>
