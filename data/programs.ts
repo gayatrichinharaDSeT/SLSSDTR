@@ -270,6 +270,18 @@ export function getProgramBySlug(slug: string): Program | undefined {
   return programs.find((program) => program.slug === slug);
 }
 
+// ProgramEnquiry.programId also carries non-program lead sources (e.g. a
+// gated resource download) that reuse the same table/API rather than a
+// dedicated model — this maps those known ids to an admin-facing label so
+// they don't just show as a raw internal slug.
+const nonProgramEnquirySources: Record<string, string> = {
+  "strategic-brief-download": "Strategic Brief Download",
+};
+
+export function getEnquirySourceLabel(programId: string): string {
+  return getProgramBySlug(programId)?.name ?? nonProgramEnquirySources[programId] ?? programId;
+}
+
 export function formatProgramPrice(price: ProgramPrice): string {
   return `₹${price.amount.toLocaleString("en-IN")} incl. ${price.gstRate}% GST`;
 }

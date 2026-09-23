@@ -6,7 +6,7 @@ import StatusBadge from "@/components/dashboard/StatusBadge";
 import EmptyState from "@/components/dashboard/EmptyState";
 import { requireUser } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
-import { getProgramBySlug } from "@/data/programs";
+import { getEnquirySourceLabel } from "@/data/programs";
 
 export const metadata: Metadata = {
   title: "Dashboard | SLSSDTR",
@@ -72,7 +72,7 @@ export default async function DashboardOverviewPage() {
         ) : (
           <div className="flex flex-col gap-3">
             {recentEnquiries.map((enquiry) => {
-              const program = getProgramBySlug(enquiry.programId);
+              const sourceLabel = getEnquirySourceLabel(enquiry.programId);
               return (
                 <div
                   key={enquiry.id}
@@ -80,7 +80,7 @@ export default async function DashboardOverviewPage() {
                 >
                   <div>
                     <p className="font-heading font-semibold text-navy">
-                      {program?.name ?? enquiry.programId}
+                      {sourceLabel}
                     </p>
                     <p className="text-xs text-ink/60">
                       {enquiry.createdAt.toLocaleDateString("en-IN", {

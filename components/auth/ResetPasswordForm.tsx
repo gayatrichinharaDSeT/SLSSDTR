@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { resetPassword } from "@/lib/auth-client";
 import { resetPasswordSchema } from "@/lib/validations/auth";
-import FormField from "./FormField";
+import PasswordField from "./PasswordField";
 import SubmitButton from "./SubmitButton";
 import FormNotice from "./FormNotice";
 
@@ -69,11 +69,10 @@ export default function ResetPasswordForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
-      <FormField
+      <PasswordField
         id="password"
         name="password"
         label="New password"
-        type="password"
         placeholder="At least 8 characters"
         autoComplete="new-password"
         required

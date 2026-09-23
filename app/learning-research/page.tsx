@@ -21,6 +21,7 @@ import IconBox from "@/components/ui/IconBox";
 import Button from "@/components/ui/Button";
 import Reveal from "@/components/ui/Reveal";
 import LearningResearchVisual from "@/components/graphics/LearningResearchVisual";
+import StrategicBriefForm from "@/components/learning-research/StrategicBriefForm";
 import { learningHighlights, learningModels, infrastructureItems, researchInnovation } from "@/data/content";
 
 export const metadata: Metadata = {
@@ -207,6 +208,55 @@ export default function LearningResearchPage() {
                 </div>
               </Reveal>
             ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* AI in Indian Life Sciences */}
+      <section className="bg-white py-16 sm:py-20 lg:py-24">
+        <Container className="flex flex-col gap-10">
+          <SectionHeading
+            eyebrow="Featured Resource"
+            title="AI in Indian Life Sciences"
+            description="A short introduction to how AI is reshaping the life sciences ecosystem in India — available in English and Hindi."
+            align="center"
+            className="mx-auto max-w-2xl"
+          />
+
+          <div className="grid gap-6 sm:grid-cols-2">
+            <div className="flex flex-col gap-3 rounded-card border border-navy/10 bg-mist p-4">
+              <div className="overflow-hidden rounded-btn bg-navy">
+                <video controls preload="metadata" className="aspect-video w-full">
+                  <source src="/videos/ai_in_Indian_life_sciences-en.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <span className="font-heading text-sm font-bold text-navy">English</span>
+            </div>
+            <div className="flex flex-col gap-3 rounded-card border border-navy/10 bg-mist p-4">
+              <div className="overflow-hidden rounded-btn bg-navy">
+                <video controls preload="metadata" className="aspect-video w-full">
+                  <source src="/videos/ai_in_Indian_life_sciences-hi.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <span className="font-heading text-sm font-bold text-navy">Hindi</span>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Strategic Brief */}
+      <section className="bg-grey py-16 sm:py-20 lg:py-24">
+        <Container className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+          <div className="flex flex-col gap-4">
+            <SectionHeading
+              eyebrow="Resource"
+              title="Why India Needs AI Training & Education — And Why It Must Be 'Train the Trainer'"
+              description="A strategic brief on building AI capability at scale across India's life sciences ecosystem. Share a few details to receive your copy."
+            />
+          </div>
+
+          <div className="rounded-card border border-navy/10 bg-white p-7 shadow-sm sm:p-9">
+            <StrategicBriefForm />
           </div>
         </Container>
       </section>

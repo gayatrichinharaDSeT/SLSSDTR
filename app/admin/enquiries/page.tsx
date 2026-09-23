@@ -4,7 +4,7 @@ import { FileText } from "lucide-react";
 import EmptyState from "@/components/dashboard/EmptyState";
 import EnquiryStatusSelect from "@/components/admin/EnquiryStatusSelect";
 import { prisma } from "@/lib/prisma";
-import { getProgramBySlug } from "@/data/programs";
+import { getEnquirySourceLabel } from "@/data/programs";
 
 export const metadata: Metadata = {
   title: "Enquiries | SLSSDTR Admin",
@@ -57,7 +57,7 @@ export default async function AdminEnquiriesPage({ searchParams }: PageProps) {
       ) : (
         <div className="flex flex-col gap-3">
           {enquiries.map((enquiry) => {
-            const program = getProgramBySlug(enquiry.programId);
+            const sourceLabel = getEnquirySourceLabel(enquiry.programId);
             return (
               <div
                 key={enquiry.id}
@@ -65,7 +65,7 @@ export default async function AdminEnquiriesPage({ searchParams }: PageProps) {
               >
                 <div className="flex flex-col gap-1">
                   <p className="font-heading font-semibold text-navy">
-                    {enquiry.name} — {program?.name ?? enquiry.programId}
+                    {enquiry.name} — {sourceLabel}
                   </p>
                   <p className="text-sm text-ink/70">
                     {enquiry.email}

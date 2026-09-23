@@ -6,6 +6,7 @@ import Link from "next/link";
 import { signUp } from "@/lib/auth-client";
 import { signUpSchema } from "@/lib/validations/auth";
 import FormField from "./FormField";
+import PasswordField from "./PasswordField";
 import SubmitButton from "./SubmitButton";
 import FormNotice from "./FormNotice";
 
@@ -81,11 +82,10 @@ export default function SignUpForm() {
         required
         error={fieldErrors.email}
       />
-      <FormField
+      <PasswordField
         id="password"
         name="password"
         label="Password"
-        type="password"
         placeholder="At least 8 characters"
         autoComplete="new-password"
         required

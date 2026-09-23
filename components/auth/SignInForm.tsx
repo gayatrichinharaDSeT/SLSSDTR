@@ -6,6 +6,7 @@ import Link from "next/link";
 import { signIn } from "@/lib/auth-client";
 import { signInSchema } from "@/lib/validations/auth";
 import FormField from "./FormField";
+import PasswordField from "./PasswordField";
 import SubmitButton from "./SubmitButton";
 import FormNotice from "./FormNotice";
 
@@ -70,11 +71,10 @@ export default function SignInForm() {
         error={fieldErrors.email}
       />
       <div>
-        <FormField
+        <PasswordField
           id="password"
           name="password"
           label="Password"
-          type="password"
           placeholder="Your password"
           autoComplete="current-password"
           required
