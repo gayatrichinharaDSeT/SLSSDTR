@@ -47,7 +47,7 @@ export default function Logo({ variant = "light", className = "" }: LogoProps) {
           SLSSDTR
         </span>
         <span className={`hidden text-[11px] font-medium sm:block ${subTextColor}`}>
-          School of Life Science
+          School of Life Sciience
         </span>
       </span>
     </Link>

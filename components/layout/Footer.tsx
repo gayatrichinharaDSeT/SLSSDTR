@@ -72,7 +72,7 @@ export default function Footer() {
       <div className="relative border-t border-white/10">
         <Container className="flex flex-col items-center justify-between gap-2 py-4 text-xs text-white/50 sm:flex-row">
           <p>© {site.copyrightYear} SLSSDTR. All rights reserved.</p>
-          <p>School of Life Science – Skill Development, Training & Research</p>
+          <p>School of Life Sciience – Skill Development, Training & Research</p>
         </Container>
       </div>
     </footer>
