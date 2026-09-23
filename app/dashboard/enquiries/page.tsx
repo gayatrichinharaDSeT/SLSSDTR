@@ -35,7 +35,7 @@ export default async function MyEnquiriesPage() {
             return (
               <div
                 key={enquiry.id}
-                className="flex flex-col gap-3 rounded-card border border-navy/10 bg-white p-5 shadow-sm sm:flex-row sm:items-start sm:justify-between"
+                className="flex flex-col gap-3 rounded-card border border-navy/10 bg-white p-5 shadow-sm transition-shadow duration-200 hover:shadow-lg hover:shadow-navy/5 sm:flex-row sm:items-start sm:justify-between"
               >
                 <div className="flex flex-col gap-1">
                   <p className="font-heading font-semibold text-navy">

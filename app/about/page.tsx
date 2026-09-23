@@ -61,40 +61,27 @@ export default function AboutPage() {
 
       {/* About SLSSDTR */}
       <section className="bg-white py-16 sm:py-20 lg:py-24">
-        <Container className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          <div className="flex flex-col gap-6">
-            <SectionHeading
-              eyebrow="About SLSSDTR"
-              title="Where Academic Rigor Meets Industry Practice"
-              description="SLSSDTR exists to close the gap between academic learning and the practical demands of the life sciences and healthcare industry. By combining industry-aligned learning, practical skill development, applied research and structured professional development, we prepare students, faculty, professionals and trainers for genuine career readiness."
-            />
+        <Container className="flex flex-col items-center gap-10">
+          <SectionHeading
+            eyebrow="About SLSSDTR"
+            title="Where Academic Rigor Meets Industry Practice"
+            description="SLSSDTR exists to close the gap between academic learning and the practical demands of the life sciences and healthcare industry. By combining industry-aligned learning, practical skill development, applied research and structured professional development, we prepare students, faculty, professionals and trainers for genuine career readiness."
+            align="center"
+            className="mx-auto max-w-2xl"
+          />
 
-            <div className="grid grid-cols-2 gap-4">
-              {aboutFeaturePoints.map(({ icon, title }) => (
-                <div key={title} className="flex items-center gap-3">
-                  <IconBox icon={icon} size="sm" tone="green" />
-                  <span className="font-heading text-sm font-semibold text-navy">
-                    {title}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-mist">
-            <svg viewBox="0 0 400 300" className="h-full w-full" aria-hidden="true">
-              <line x1="200" y1="150" x2="90" y2="80" stroke="#212B4D" strokeOpacity="0.2" strokeWidth="1.5" />
-              <line x1="200" y1="150" x2="320" y2="70" stroke="#212B4D" strokeOpacity="0.2" strokeWidth="1.5" />
-              <line x1="200" y1="150" x2="80" y2="220" stroke="#212B4D" strokeOpacity="0.2" strokeWidth="1.5" />
-              <line x1="200" y1="150" x2="330" y2="230" stroke="#212B4D" strokeOpacity="0.2" strokeWidth="1.5" />
-              <circle cx="200" cy="60" r="44" fill="none" stroke="#2F8C5C" strokeOpacity="0.15" strokeWidth="1" />
-              <circle cx="90" cy="80" r="20" fill="#2F8C5C" fillOpacity="0.85" />
-              <circle cx="320" cy="70" r="16" fill="#2F5F9B" fillOpacity="0.85" />
-              <circle cx="80" cy="220" r="16" fill="#2F5F9B" fillOpacity="0.85" />
-              <circle cx="330" cy="230" r="20" fill="#2F8C5C" fillOpacity="0.85" />
-              <circle cx="200" cy="150" r="34" fill="#212B4D" />
-              <circle cx="200" cy="150" r="4" fill="#F6CE2E" />
-            </svg>
+          <div className="grid grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:justify-center">
+            {aboutFeaturePoints.map(({ icon, title }) => (
+              <div
+                key={title}
+                className="group flex items-center gap-3 rounded-card border border-navy/10 bg-white px-5 py-4 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5"
+              >
+                <IconBox icon={icon} size="sm" tone="green" />
+                <span className="font-heading text-sm font-semibold text-navy">
+                  {title}
+                </span>
+              </div>
+            ))}
           </div>
         </Container>
       </section>

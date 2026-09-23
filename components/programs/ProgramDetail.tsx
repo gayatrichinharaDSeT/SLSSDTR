@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Check, Download } from "lucide-react";
+import { Check, Download, Eye } from "lucide-react";
 import Container from "@/components/ui/Container";
 import PageHero from "@/components/ui/PageHero";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -45,15 +45,25 @@ export default async function ProgramDetail({ program, children }: ProgramDetail
               </div>
             ))}
           </div>
-          <a
-            href={program.brochureUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-5 inline-flex items-center gap-2 text-sm font-semibold font-heading text-green hover:text-green-dark"
-          >
-            <Download className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
-            Download Brochure
-          </a>
+          <div className="mt-5 flex flex-wrap items-center gap-5">
+            <a
+              href={program.brochureUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-semibold font-heading text-green hover:text-green-dark"
+            >
+              <Eye className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+              View Brochure
+            </a>
+            <a
+              href={program.brochureUrl}
+              download
+              className="inline-flex items-center gap-2 text-sm font-semibold font-heading text-green hover:text-green-dark"
+            >
+              <Download className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+              Download Brochure
+            </a>
+          </div>
         </Container>
       </section>
 

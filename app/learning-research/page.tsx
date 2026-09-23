@@ -80,7 +80,7 @@ export default function LearningResearchPage() {
           <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-center">
             {stages.map((stage, index) => (
               <div key={stage.title} className="flex items-center gap-4">
-                <div className="flex flex-col items-center gap-2 rounded-card border border-navy/10 bg-white p-5 text-center shadow-sm transition-transform duration-200 hover:-translate-y-1 sm:w-44">
+                <div className="flex flex-col items-center gap-2 rounded-card border border-navy/10 bg-white p-5 text-center shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-green/40 hover:shadow-lg hover:shadow-navy/5 sm:w-44">
                   <span className="font-heading text-lg font-bold text-navy">{stage.title}</span>
                   <span className="text-xs leading-snug text-ink">{stage.description}</span>
                 </div>
