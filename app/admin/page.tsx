@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { FileText, Mail, MessageSquare, Users } from "lucide-react";
+import { Boxes, FileText, Mail, MessageSquare, Users } from "lucide-react";
 import StatCard from "@/components/dashboard/StatCard";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import EmptyState from "@/components/dashboard/EmptyState";
@@ -12,10 +12,11 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminOverviewPage() {
-  const [totalUsers, newEnquiries, totalMessages, recentEnquiries] = await Promise.all([
+  const [totalUsers, newEnquiries, totalMessages, newModuleRequests, recentEnquiries] = await Promise.all([
     prisma.user.count(),
     prisma.programEnquiry.count({ where: { status: "NEW" } }),
     prisma.contactMessage.count(),
+    prisma.customizedModuleRequest.count({ where: { status: "NEW" } }),
     prisma.programEnquiry.findMany({
       orderBy: { createdAt: "desc" },
       take: 5,
@@ -25,10 +26,11 @@ export default async function AdminOverviewPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard icon={Users} label="Total Users" value={totalUsers} tone="blue" />
         <StatCard icon={Mail} label="New Enquiries" value={newEnquiries} tone="yellow" />
         <StatCard icon={MessageSquare} label="Contact Messages" value={totalMessages} tone="green" />
+        <StatCard icon={Boxes} label="New Module Requests" value={newModuleRequests} tone="navy" />
       </div>
 
       <div className="flex flex-col gap-4">

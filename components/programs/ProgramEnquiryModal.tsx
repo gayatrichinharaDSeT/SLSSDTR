@@ -11,10 +11,11 @@ import { programEnquirySchema } from "@/lib/validations/enquiry";
 type ProgramEnquiryModalProps = {
   programId: string;
   programName: string;
+  batches: { id: string; label: string; monthLabel: string }[];
   onClose: () => void;
 };
 
-export default function ProgramEnquiryModal({ programId, programName, onClose }: ProgramEnquiryModalProps) {
+export default function ProgramEnquiryModal({ programId, programName, batches, onClose }: ProgramEnquiryModalProps) {
   const [pending, setPending] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [notice, setNotice] = useState<{ tone: "success" | "error"; message: string } | null>(null);
@@ -43,6 +44,7 @@ export default function ProgramEnquiryModal({ programId, programName, onClose }:
       phone: String(formData.get("phone") ?? ""),
       organization: String(formData.get("organization") ?? ""),
       message: String(formData.get("message") ?? ""),
+      preferredBatch: String(formData.get("preferredBatch") ?? ""),
     };
 
     const parsed = programEnquirySchema.safeParse(values);
@@ -148,6 +150,26 @@ export default function ProgramEnquiryModal({ programId, programName, onClose }:
                 error={fieldErrors.organization}
               />
             </div>
+            {batches.length > 0 ? (
+              <div>
+                <label htmlFor="preferredBatch" className={fieldLabelClasses}>
+                  Preferred Batch
+                </label>
+                <select
+                  id="preferredBatch"
+                  name="preferredBatch"
+                  defaultValue=""
+                  className={`${fieldInputClasses} cursor-pointer`}
+                >
+                  <option value="">No preference</option>
+                  {batches.map((batch) => (
+                    <option key={batch.id} value={`${batch.label} — ${batch.monthLabel}`}>
+                      {batch.label} — {batch.monthLabel}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : null}
             <div>
               <label htmlFor="message" className={fieldLabelClasses}>
                 Message

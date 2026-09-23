@@ -3,6 +3,7 @@ import Container from "@/components/ui/Container";
 import PageHero from "@/components/ui/PageHero";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Badge from "@/components/ui/Badge";
+import Button from "@/components/ui/Button";
 import ProgramCard from "@/components/home/ProgramCard";
 import FinalCTA from "@/components/home/FinalCTA";
 import ProgramsVisual from "@/components/graphics/ProgramsVisual";
@@ -21,7 +22,7 @@ export default function ProgramsPage() {
       <PageHero
         eyebrow="PROGRAMS"
         title="Programs Designed for Transformation"
-        description="Practical, industry-aligned programs for students, faculty, entrepreneurs and trainers across the life sciences ecosystem."
+        description="Practical, industry-aligned programs for students, faculty, professionals, trainers and entrepreneurs across the life sciences ecosystem."
         visual={<ProgramsVisual />}
       />
 
@@ -30,12 +31,25 @@ export default function ProgramsPage() {
           <SectionHeading
             eyebrow="AI Transformation Programs"
             title="AI Transformation for the Life Sciences Ecosystem"
-            description="Four focused programs, each designed for a distinct audience within the life sciences and healthcare ecosystem."
+            description="Five focused programs, each designed for a distinct audience within the life sciences and healthcare ecosystem."
           />
           <div className="grid gap-6 sm:grid-cols-2">
             {programs.map((program) => (
               <ProgramCard key={program.slug} program={program} />
             ))}
+          </div>
+
+          <div className="flex flex-col items-center gap-3 rounded-card border border-navy/10 bg-mist p-8 text-center sm:p-10">
+            <h3 className="font-heading text-xl font-bold text-navy">
+              Need a Custom Module for Your Organization?
+            </h3>
+            <p className="max-w-xl text-sm text-ink">
+              Tell us which departments you want to cover and we&apos;ll help design a
+              tailored training module for your teams.
+            </p>
+            <Button href="/customized-modules" variant="secondary" className="mt-1">
+              Request a Customized Module
+            </Button>
           </div>
         </Container>
       </section>

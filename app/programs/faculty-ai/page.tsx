@@ -3,9 +3,9 @@ import ProgramDetail from "@/components/programs/ProgramDetail";
 import { getProgramBySlug } from "@/data/programs";
 
 export const metadata: Metadata = {
-  title: "AI Faculty Transformation | SLSSDTR",
+  title: "Faculty AI Mastery | SLSSDTR",
   description:
-    "AI-enabled teaching, research, academic productivity, curriculum development and student mentoring for faculty and educators.",
+    "3-weekend hands-on faculty development program for Pharmacy and Life Science educators — AI-powered teaching, research and academic productivity.",
 };
 
 export default function FacultyAIPage() {

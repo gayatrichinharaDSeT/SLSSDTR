@@ -46,7 +46,25 @@ async function main() {
   console.log(`[seed] Created ADMIN account for ${email}.`);
 }
 
+// Shared cohort batches (Section 5) — idempotent by label, so re-running
+// the seed never creates duplicates.
+async function seedBatches() {
+  const batches = [
+    { label: "Batch 1", monthLabel: "November 2026", startsOn: new Date("2026-11-01"), displayOrder: 1 },
+    { label: "Batch 2", monthLabel: "December 2026", startsOn: new Date("2026-12-01"), displayOrder: 2 },
+    { label: "Batch 3", monthLabel: "January 2027", startsOn: new Date("2027-01-01"), displayOrder: 3 },
+  ];
+
+  for (const batch of batches) {
+    const existing = await prisma.batch.findFirst({ where: { label: batch.label } });
+    if (existing) continue;
+    await prisma.batch.create({ data: batch });
+    console.log(`[seed] Created ${batch.label} (${batch.monthLabel}).`);
+  }
+}
+
 main()
+  .then(seedBatches)
   .catch((error) => {
     console.error("[seed] Failed:", error);
     process.exitCode = 1;

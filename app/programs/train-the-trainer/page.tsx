@@ -5,9 +5,9 @@ import ProgramDetail from "@/components/programs/ProgramDetail";
 import { getProgramBySlug } from "@/data/programs";
 
 export const metadata: Metadata = {
-  title: "Train-the-Trainer AI | SLSSDTR",
+  title: "Train the Trainer | SLSSDTR",
   description:
-    "Build AI trainers who can develop and deliver practical AI learning programs for Life Sciences and Healthcare environments.",
+    "Become a certified AI faculty-cum-trainer for Life Science & Healthcare — 60+ AI tools mapped to 18 departments, followed by paid training assignments.",
 };
 
 const trainingEcosystem = [

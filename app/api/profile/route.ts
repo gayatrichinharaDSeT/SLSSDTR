@@ -1,3 +1,4 @@
+import type { CompanyType, Profession } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getApiUser } from "@/lib/permissions";
 import { updateProfileSchema } from "@/lib/validations/profile";
@@ -25,21 +26,45 @@ export async function PATCH(request: Request) {
     return apiError("VALIDATION_ERROR", parsed.error.issues[0]?.message ?? "Invalid input.");
   }
 
-  const { name, phone, organization } = parsed.data;
+  const {
+    name,
+    phone,
+    organization,
+    location,
+    country,
+    profession,
+    professionOther,
+    courseName,
+    institution,
+    currentYear,
+    specialization,
+    companyName,
+    companyType,
+    companyTypeOther,
+  } = parsed.data;
 
   try {
     const updated = await prisma.user.update({
       where: { id: user.id },
-      data: { name, phone: phone || null, organization: organization || null },
+      data: {
+        name,
+        phone: phone || null,
+        organization: organization || null,
+        location: location || null,
+        country: country || null,
+        profession: profession ? (profession as Profession) : null,
+        professionOther: professionOther || null,
+        courseName: courseName || null,
+        institution: institution || null,
+        currentYear: currentYear || null,
+        specialization: specialization || null,
+        companyName: companyName || null,
+        companyType: companyType ? (companyType as CompanyType) : null,
+        companyTypeOther: companyTypeOther || null,
+      },
     });
 
-    return apiSuccess({
-      id: updated.id,
-      name: updated.name,
-      email: updated.email,
-      phone: updated.phone,
-      organization: updated.organization,
-    });
+    return apiSuccess(updated);
   } catch (error) {
     return apiInternalError("profile.update", error);
   }

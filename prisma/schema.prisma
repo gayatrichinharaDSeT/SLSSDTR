@@ -1,9 +1,12 @@
 // SLSSDTR — backend foundation schema (PostgreSQL via Prisma 7)
 //
-// Scope for this phase: authentication (Better Auth) + contact messages +
-// program enquiries. Deliberately excludes LMS/course/payment models —
-// see the ProgramEnquiry.programId comment for how those attach later
-// without a schema rewrite.
+// Scope for this phase: authentication (Better Auth), contact messages,
+// program enquiries (with DSeT-attribution fields prepared but not yet
+// wired to a confirmed integration), customized-module requests, and a
+// database-backed batch list. Deliberately excludes LMS/course/payment
+// models — see ProgramEnquiry.programId and Batch.programId comments for
+// how a future Program/Enrollment/Payment layer attaches without a
+// rewrite.
 
 generator client {
   provider = "prisma-client-js"
@@ -37,21 +40,68 @@ enum EnquiryStatus {
   RESOLVED
 }
 
+enum Profession {
+  STUDENT
+  FACULTY
+  PROFESSIONAL
+  ENTREPRENEUR
+  SELF_EMPLOYED
+  EXPERIENCED_NO_ENGAGEMENT
+  OTHER
+}
+
+enum CompanyType {
+  PHARMACEUTICAL
+  MEDICAL_DEVICE
+  MEDICAL_EQUIPMENT
+  SURGICAL_CONSUMABLES
+  HOSPITAL
+  DISTRIBUTOR
+  CONSULTING
+  LABORATORY
+  MARKET_RESEARCH
+  TRAINING
+  OTHERS
+}
+
 model User {
-  id            String   @id @default(cuid())
+  id            String  @id @default(cuid())
   name          String
-  email         String   @unique
-  emailVerified Boolean  @default(false)
+  email         String  @unique
+  emailVerified Boolean @default(false)
   image         String?
   phone         String?
   organization  String?
-  role          Role     @default(USER)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  role          Role    @default(USER)
 
-  sessions         Session[]
-  accounts         Account[]
-  programEnquiries ProgramEnquiry[]
+  // Profile / registration fields (Section 6). All nullable — a user is
+  // never forced to complete these, and existing rows stay valid as-is.
+  location        String?
+  country         String?
+  profession      Profession?
+  professionOther String?
+
+  // Conditional on profession = STUDENT
+  courseName  String?
+  institution String?
+  currentYear String?
+
+  // Conditional on profession = FACULTY (institution reused from above;
+  // specialization is faculty-specific)
+  specialization String?
+
+  // Conditional on profession = PROFESSIONAL / ENTREPRENEUR / SELF_EMPLOYED
+  companyName      String?
+  companyType      CompanyType?
+  companyTypeOther String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions                 Session[]
+  accounts                 Account[]
+  programEnquiries         ProgramEnquiry[]
+  customizedModuleRequests CustomizedModuleRequest[]
 
   @@map("user")
 }
@@ -126,8 +176,20 @@ model ContactMessage {
 
 // programId stores the stable slug from data/programs.ts (e.g.
 // "student-ai"), not a foreign key — programs stay static content for
-// this phase. A future Program table/CMS can adopt the same string as
-// its primary key without touching existing ProgramEnquiry rows.
+// this phase.
+//
+// IMPORTANT: this table is also written to directly by DSeT's own
+// backend, outside this Prisma schema/migration history (confirmed via
+// live introspection — it already carries source/external_system/
+// external_reference/location/country/role/department/course_name/
+// current_year/subject_specialization/company_name/company_type/metadata
+// columns with 12 real rows). This model intentionally does NOT declare
+// those columns: doing so now, from this side, would require Prisma to
+// reconcile its migration history against a database that already
+// diverged out-of-band, and risks an unintended ALTER/DROP against live,
+// shared, DSeT-owned data. Do not add those fields here until the actual
+// live column types/constraints have been confirmed with the DSeT team
+// and reconciled via `prisma db pull`, not guessed at.
 model ProgramEnquiry {
   id           String        @id @default(cuid())
   programId    String
@@ -137,8 +199,12 @@ model ProgramEnquiry {
   organization String?
   message      String
   status       EnquiryStatus @default(NEW)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  // Plain text, matching DSeT's own `batch` convention on
+  // academy_registrations — no FK to Batch, so it never blocks an insert
+  // that doesn't set it.
+  preferredBatch String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   // Nullable: guest visitors can submit enquiries without an account.
   // SetNull (not Cascade) so deleting a user never deletes the business
@@ -150,4 +216,48 @@ model ProgramEnquiry {
   @@index([programId])
   @@index([status])
   @@map("program_enquiry")
+}
+
+// A visitor's request for a custom training module, spanning one or more
+// business departments — distinct from a ProgramEnquiry because it is not
+// necessarily tied to one of the five published programs.
+model CustomizedModuleRequest {
+  id           String        @id @default(cuid())
+  name         String
+  email        String
+  phone        String?
+  organization String?
+  // The 18 business departments (Section 7), stored as a native Postgres
+  // text array rather than a join table — this is a simple multi-select
+  // tag list, not a relation with its own attributes.
+  departments  String[]
+  programId    String?
+  message      String?
+  status       EnquiryStatus @default(NEW)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([status])
+  @@map("customized_module_request")
+}
+
+// Cohort batches, shared across all five programs (Section 5) — defined
+// once here rather than hard-coded into program cards, program detail
+// pages and any future enrollment UI independently.
+model Batch {
+  id           String   @id @default(cuid())
+  label        String // "Batch 1", "Batch 2", "Batch 3"
+  monthLabel   String // "November 2026", "December 2026", "January 2027"
+  startsOn     DateTime // first of that month, for sorting
+  isActive     Boolean  @default(true)
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([isActive])
+  @@map("batch")
 }

@@ -15,6 +15,7 @@ export const programEnquirySchema = z.object({
   phone: z.string().trim().max(30).optional().or(z.literal("")),
   organization: z.string().trim().max(160).optional().or(z.literal("")),
   message: z.string().trim().min(10, "Message must be at least 10 characters").max(4000),
+  preferredBatch: z.string().trim().max(60).optional().or(z.literal("")),
 });
 
 export type ProgramEnquiryInput = z.infer<typeof programEnquirySchema>;
@@ -31,6 +32,7 @@ export const programLeadSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters").max(120),
   phone: z.string().trim().min(7, "Enter a valid phone number").max(30),
   email: z.string().trim().email("Enter a valid email address").max(255),
+  preferredBatch: z.string().trim().max(60).optional().or(z.literal("")),
 });
 
 export type ProgramLeadInput = z.infer<typeof programLeadSchema>;

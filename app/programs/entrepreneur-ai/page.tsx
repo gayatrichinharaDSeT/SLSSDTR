@@ -3,9 +3,9 @@ import ProgramDetail from "@/components/programs/ProgramDetail";
 import { getProgramBySlug } from "@/data/programs";
 
 export const metadata: Metadata = {
-  title: "Entrepreneur AI Transformation | SLSSDTR",
+  title: "Entrepreneur Mastery | SLSSDTR",
   description:
-    "Practical AI adoption across business strategy, operations, marketing, sales, productivity and decision-making for entrepreneurs and business professionals.",
+    "Lead AI adoption across your organisation and your venture in Life Science & Healthcare — 60+ AI tools mapped to 18 business departments.",
 };
 
 export default function EntrepreneurAIPage() {

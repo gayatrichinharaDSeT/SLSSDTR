@@ -11,6 +11,17 @@ export type CurrentUser = {
   role: string;
   phone: string | null;
   organization: string | null;
+  location: string | null;
+  country: string | null;
+  profession: string | null;
+  professionOther: string | null;
+  courseName: string | null;
+  institution: string | null;
+  currentYear: string | null;
+  specialization: string | null;
+  companyName: string | null;
+  companyType: string | null;
+  companyTypeOther: string | null;
 };
 
 // The only place that reads a session. Every protected page, layout, and
@@ -23,7 +34,7 @@ export async function getSession() {
   return session;
 }
 
-export function toCurrentUser(user: {
+type SessionUser = {
   id: string;
   name: string;
   email: string;
@@ -31,7 +42,20 @@ export function toCurrentUser(user: {
   phone?: string | null;
   organization?: string | null;
   role?: string | null;
-}): CurrentUser {
+  location?: string | null;
+  country?: string | null;
+  profession?: string | null;
+  professionOther?: string | null;
+  courseName?: string | null;
+  institution?: string | null;
+  currentYear?: string | null;
+  specialization?: string | null;
+  companyName?: string | null;
+  companyType?: string | null;
+  companyTypeOther?: string | null;
+};
+
+export function toCurrentUser(user: SessionUser): CurrentUser {
   return {
     id: user.id,
     name: user.name,
@@ -40,6 +64,17 @@ export function toCurrentUser(user: {
     role: user.role ?? "USER",
     phone: user.phone ?? null,
     organization: user.organization ?? null,
+    location: user.location ?? null,
+    country: user.country ?? null,
+    profession: user.profession ?? null,
+    professionOther: user.professionOther ?? null,
+    courseName: user.courseName ?? null,
+    institution: user.institution ?? null,
+    currentYear: user.currentYear ?? null,
+    specialization: user.specialization ?? null,
+    companyName: user.companyName ?? null,
+    companyType: user.companyType ?? null,
+    companyTypeOther: user.companyTypeOther ?? null,
   };
 }
 

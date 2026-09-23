@@ -3,9 +3,9 @@ import ProgramDetail from "@/components/programs/ProgramDetail";
 import { getProgramBySlug } from "@/data/programs";
 
 export const metadata: Metadata = {
-  title: "AI Student Transformation | SLSSDTR",
+  title: "Student AI Mastery | SLSSDTR",
   description:
-    "Practical AI skills for students in Life Sciences, Healthcare, Pharmacy, Biotechnology, Medicine and other non-IT disciplines.",
+    "3-weekend hands-on AI certification for Pharmacy, Pharmaceutical Sciences and Life Science students — research intelligence, drug discovery applications and an AI-ready career profile.",
 };
 
 export default function StudentAIPage() {

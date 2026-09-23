@@ -4,7 +4,13 @@ import { useState } from "react";
 import Button from "@/components/ui/Button";
 import ProgramEnquiryModal from "./ProgramEnquiryModal";
 
-export default function EnquireButton({ programId, programName }: { programId: string; programName: string }) {
+type EnquireButtonProps = {
+  programId: string;
+  programName: string;
+  batches: { id: string; label: string; monthLabel: string }[];
+};
+
+export default function EnquireButton({ programId, programName, batches }: EnquireButtonProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -13,7 +19,12 @@ export default function EnquireButton({ programId, programName }: { programId: s
         Enquire Now
       </Button>
       {open ? (
-        <ProgramEnquiryModal programId={programId} programName={programName} onClose={() => setOpen(false)} />
+        <ProgramEnquiryModal
+          programId={programId}
+          programName={programName}
+          batches={batches}
+          onClose={() => setOpen(false)}
+        />
       ) : null}
     </>
   );

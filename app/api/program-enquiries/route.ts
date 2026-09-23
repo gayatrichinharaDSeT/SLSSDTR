@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     return apiError("VALIDATION_ERROR", parsed.error.issues[0]?.message ?? "Invalid input.");
   }
 
-  const { programId, name, email, phone, organization, message } = parsed.data;
+  const { programId, name, email, phone, organization, message, preferredBatch } = parsed.data;
 
   // Guests submit without a session (userId stays null); a signed-in
   // visitor's enquiry is always attributed to their own session user —
@@ -40,6 +40,7 @@ export async function POST(request: Request) {
         phone: phone || null,
         organization: organization || null,
         message,
+        preferredBatch: preferredBatch || null,
         userId: currentUser?.id ?? null,
       },
     });

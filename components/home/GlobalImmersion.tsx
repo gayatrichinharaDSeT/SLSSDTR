@@ -10,7 +10,7 @@ export default function GlobalImmersion() {
         <SectionHeading
           eyebrow="Global Immersion"
           title="Global Immersion"
-          description="Immersive learning is proposed for selected programs — particularly Train-the-Trainer and Entrepreneur AI Transformation — with 1–2 day immersive sessions envisioned at the locations below."
+          description="Immersive learning is proposed for selected programs — particularly Train the Trainer and Entrepreneur Mastery — with 1–2 day immersive sessions envisioned at the locations below."
           align="center"
           className="mx-auto max-w-2xl"
         />
