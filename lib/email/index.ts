@@ -1,17 +1,21 @@
 import { devEmailProvider } from "./dev";
-import { createResendProvider } from "./resend";
+import { createSmtpProvider } from "./smtp";
 import type { EmailMessage, EmailProvider } from "./types";
 
 // Auth logic and API routes call sendEmail() and never touch a specific
 // provider. Provider selection happens once, here, based on whether
-// RESEND_API_KEY / EMAIL_FROM are configured — unset in development by
-// default, which is intentional (see lib/email/dev.ts).
+// SMTP_HOST/SMTP_USER/SMTP_PASS/SMTP_PORT/SMTP_FROM are all configured —
+// unset in development by default, which is intentional (see
+// lib/email/dev.ts).
 function resolveProvider(): EmailProvider {
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM;
+  const host = process.env.SMTP_HOST;
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+  const from = process.env.SMTP_FROM;
+  const port = Number(process.env.SMTP_PORT);
 
-  if (apiKey && from) {
-    return createResendProvider(apiKey, from);
+  if (host && user && pass && from && Number.isInteger(port) && port > 0) {
+    return createSmtpProvider({ host, port, user, pass, from });
   }
 
   return devEmailProvider;

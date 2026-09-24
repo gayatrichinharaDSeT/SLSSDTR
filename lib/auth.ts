@@ -18,10 +18,10 @@ export const auth = betterAuth({
     autoSignIn: true,
     minPasswordLength: 8,
     // Not gating sign-in on verification in this phase — doing so would
-    // lock every user out until a real transactional email provider is
-    // configured (see lib/email/). The verification email still sends on
-    // sign-up below, so the flow is fully wired and just needs
-    // RESEND_API_KEY + EMAIL_FROM to go live end-to-end.
+    // lock every user out until a real SMTP provider is configured (see
+    // lib/email/). The verification email still sends on sign-up below, so
+    // the flow is fully wired and just needs SMTP_HOST/SMTP_USER/SMTP_PASS/
+    // SMTP_PORT/SMTP_FROM to go live end-to-end.
     requireEmailVerification: false,
     sendResetPassword: async ({ user, url }) => {
       await sendEmail({

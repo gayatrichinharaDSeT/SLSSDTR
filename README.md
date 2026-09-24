@@ -37,7 +37,7 @@ See `.env.example` for the full list with descriptions. At minimum:
 | `DATABASE_URL` | Yes | PostgreSQL connection string |
 | `BETTER_AUTH_SECRET` | Yes | `openssl rand -base64 32` |
 | `BETTER_AUTH_URL` / `NEXT_PUBLIC_APP_URL` | Yes | The app's own URL |
-| `RESEND_API_KEY` / `EMAIL_FROM` | No | Without these, all emails (auth + the 3 form flows below) are logged to the server console instead of sent (see `lib/email/` and §7) |
+| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` / `SMTP_FROM` | No | Without all five set, all emails (auth + the 3 form flows below) are logged to the server console instead of sent (see `lib/email/` and §7) |
 | `ADMIN_NOTIFICATION_EMAIL` | No | If set, program enquiry / contact / customized module submissions also send a notification email here |
 | `ADMIN_EMAIL` / `ADMIN_PASSWORD` | No | Used only by `npm run db:seed` |
 
@@ -59,7 +59,7 @@ npm run db:studio     # open Prisma Studio
 - **Better Auth** (`lib/auth.ts`) with the Prisma adapter (`better-auth/adapters/prisma`) and the `@prisma/adapter-pg` driver adapter (required by Prisma 7 — see below).
 - Route handler: `app/api/auth/[...all]/route.ts` mounts every Better Auth endpoint (`sign-up`, `sign-in`, `sign-out`, `request-password-reset`, `reset-password`, `verify-email`, `get-session`, …) under `/api/auth`.
 - Client: `lib/auth-client.ts` (`better-auth/react`), used from the auth forms in `components/auth/` and the nav's session check.
-- Email/password auth is enabled with `requireEmailVerification: false` — a deliberate phase-1 choice: gating sign-in on verification would lock every user out until a real email provider (`RESEND_API_KEY`) is configured. The verification email still sends on sign-up (`emailVerification.sendOnSignUp: true`); the flow is fully wired and just needs a real provider to go live end-to-end.
+- Email/password auth is enabled with `requireEmailVerification: false` — a deliberate phase-1 choice: gating sign-in on verification would lock every user out until real SMTP credentials (see §7) are configured. The verification email still sends on sign-up (`emailVerification.sendOnSignUp: true`); the flow is fully wired and just needs those credentials to go live end-to-end.
 - **Route protection**: `proxy.ts` (Next.js 16's current convention — `middleware.ts` is deprecated in this Next version) does a coarse, edge-safe check for `/dashboard/*` and `/admin/*`: is a session cookie present at all. It cannot verify the session or check role at the edge. The actual authorization is `requireUser()` / `requireAdmin()` in `lib/permissions.ts`, called from `app/dashboard/layout.tsx` and `app/admin/layout.tsx`, which re-verify the session against the database on every request and redirect if it's missing, expired, or (for admin) not role `ADMIN`.
 - API routes use `getApiUser()` / `getApiAdmin()` (same file) and return `401`/`403` rather than redirecting.
 
@@ -100,12 +100,12 @@ Three form flows each send two emails: a confirmation to the person who submitte
 | Contact Form (`/api/contact`) | Yes | Yes — name, email, phone, organization, interest, message |
 | Customized Modules (`/api/customized-modules`) | Yes | Yes — name, email, phone, organization, related program, departments, message |
 
-**Provider**: [Resend](https://resend.com) (transactional email API — no SMTP server to run, works natively on Vercel's serverless runtime). Implemented in `lib/email/`:
+**Provider**: SMTP, sent via [Nodemailer](https://nodemailer.com) — works with any standard SMTP server/relay the SLSSDTR business email account provides (Google Workspace, Microsoft 365, Zoho Mail, a hosting provider's SMTP, or a transactional-email SMTP relay). Implemented in `lib/email/`:
 - `lib/email/types.ts` — the provider-agnostic `EmailMessage`/`EmailProvider` interface (includes an optional `replyTo`).
-- `lib/email/resend.ts` — calls Resend's REST API directly (no SDK dependency).
-- `lib/email/dev.ts` — fallback used whenever `RESEND_API_KEY`/`EMAIL_FROM` aren't set: logs the email to the server console instead of sending it. This is what's active today — **no real email is being sent yet**.
+- `lib/email/smtp.ts` — sends via Nodemailer's SMTP transport, built from the 5 `SMTP_*` env vars below.
+- `lib/email/dev.ts` — fallback used whenever the `SMTP_*` variables aren't all set: logs the email to the server console instead of sending it. This is what's active today — **no real email is being sent yet**.
 - `lib/email/templates.ts` — the branded HTML + plain-text templates (SLSSDTR navy header, consistent layout) for all 6 emails above, plus the shared layout/detail-row helpers they're built from.
-- `lib/email/index.ts` — `sendEmail()`, the single entry point every call site uses; picks the Resend provider automatically once both env vars are set, with zero code changes needed elsewhere.
+- `lib/email/index.ts` — `sendEmail()`, the single entry point every call site uses; picks the SMTP provider automatically once all 5 `SMTP_*` env vars are set, with zero code changes needed elsewhere.
 
 Admin notification emails also set `Reply-To` to the submitter's own address, so the SLSSDTR team can reply directly from their inbox without exposing that address as the technical sender.
 
@@ -113,26 +113,30 @@ Admin notification emails also set `Reply-To` to the submitter's own address, so
 
 | Variable | Required for real sending | Notes |
 |---|---|---|
-| `RESEND_API_KEY` | Yes | From the Resend dashboard → Settings → API Keys |
-| `EMAIL_FROM` | Yes | The verified sender, e.g. `SLSSDTR <notifications@slssdtr.example>` — must be on a domain verified in Resend (see below) |
-| `ADMIN_NOTIFICATION_EMAIL` | No (but needed for the admin-side notification to actually go anywhere) | The inbox that receives the 3 forms' notification emails — can be any real inbox the SLSSDTR team checks, doesn't need to be on the verified sending domain |
+| `SMTP_HOST` | Yes | The mail server hostname, e.g. `smtp.your-provider.com` |
+| `SMTP_PORT` | Yes | `465` (implicit TLS) or `587` (STARTTLS) are the two common ports. The app sets `secure: true` automatically for port `465` and `secure: false` for everything else (including `587`) — standard SMTP behavior, not something to configure separately. |
+| `SMTP_USER` | Yes | The mailbox/account username for the address in `SMTP_FROM` |
+| `SMTP_PASS` | Yes | The mailbox/account password (or an app password / SMTP-specific credential, depending on the provider) |
+| `SMTP_FROM` | Yes | The verified sender, e.g. `SLSSDTR <notifications@slssdtr.example>` |
+| `ADMIN_NOTIFICATION_EMAIL` | No (but needed for the admin-side notification to actually go anywhere) | The inbox that receives the 3 forms' notification emails — can be any real inbox the SLSSDTR team checks |
+
+All 5 `SMTP_*` variables must be set together — the app falls back to the dev-console logger if any one of them is missing.
 
 ### What Sir needs to provide/configure later
 
-1. **A Resend account** (or confirm which transactional email provider SLSSDTR wants to use — Resend is what's implemented; swapping providers means adding one sibling file next to `lib/email/resend.ts` and a one-line change in `lib/email/index.ts`, everything else stays the same).
-2. **The official sending domain or email**, e.g. `slssdtr.com` or `mail.slssdtr.com` — added and DNS-verified inside Resend (Resend's dashboard provides the exact DNS records — typically DKIM + a return-path/SPF record — to add at the domain's DNS provider; this is provider-generated per domain, so it can't be pre-filled here).
-3. **The `RESEND_API_KEY`** generated after the domain is verified.
-4. **The exact `EMAIL_FROM` address** to send as once the domain is verified (e.g. `SLSSDTR <hello@slssdtr.com>`).
-5. **The inbox for `ADMIN_NOTIFICATION_EMAIL`** — which real mailbox the SLSSDTR team wants form notifications sent to.
+1. **The official SLSSDTR business email account and its SMTP details** — host, port, username, and password (or app password) for that mailbox, from whichever provider hosts it (Google Workspace, Microsoft 365, Zoho Mail, hosting-provider email, etc.).
+2. **The exact `SMTP_FROM` address** to send as (e.g. `SLSSDTR <hello@slssdtr.com>`) — typically the same mailbox as #1, or an alias on it.
+3. **The inbox for `ADMIN_NOTIFICATION_EMAIL`** — which real mailbox the SLSSDTR team wants form notifications sent to (can be the same address as #1).
+4. **Any sending-domain setup the mailbox provider requires** — most providers (Google Workspace, Microsoft 365, etc.) already have SPF/DKIM configured for their own domains; if the domain is self-hosted or newly set up, whoever manages its DNS may need to confirm SPF/DKIM records are in place so outgoing mail isn't flagged as spam. This is provider-specific and outside this app's code.
 
 ### Activating it in Vercel once the above is ready
 
 1. Vercel Project → Settings → Environment Variables.
-2. Add `RESEND_API_KEY`, `EMAIL_FROM`, `ADMIN_NOTIFICATION_EMAIL` to the **Production** environment (values in #1).
-3. Redeploy (env var changes require a new deployment to take effect — the same pattern already used for `ADMIN_PANEL_ENABLED`, see §9).
+2. Add `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, `ADMIN_NOTIFICATION_EMAIL` to the **Production** environment (values in #1–3 above).
+3. Redeploy (env var changes require a new deployment to take effect — the same pattern already used for `ADMIN_PANEL_ENABLED`, see §10).
 4. Verify: submit a real program enquiry, contact form, and customized module request on the live site, and confirm both the confirmation email and the admin notification arrive.
 
-Until all three variables are set, the system keeps working exactly as it does today — submissions save to the database normally, and `lib/email/dev.ts` logs what each email would have said to the server console instead of sending it.
+Until all five `SMTP_*` variables are set, the system keeps working exactly as it does today — submissions save to the database normally, and `lib/email/dev.ts` logs what each email would have said to the server console instead of sending it.
 
 ## 8. Security
 
@@ -157,7 +161,7 @@ Until all three variables are set, the system keeps working exactly as it does t
 
 1. Push this repository to Git and import it into Vercel.
 2. Provision PostgreSQL (Vercel Marketplace → Prisma Postgres/Neon, or your own Neon/Supabase project) and copy its connection string.
-3. In Vercel's project settings, set: `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` (your production URL), `NEXT_PUBLIC_APP_URL` (same), and optionally `RESEND_API_KEY` / `EMAIL_FROM` / `ADMIN_NOTIFICATION_EMAIL` (see §7 for exact steps).
+3. In Vercel's project settings, set: `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` (your production URL), `NEXT_PUBLIC_APP_URL` (same), and optionally `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` / `SMTP_FROM` / `ADMIN_NOTIFICATION_EMAIL` (see §7 for exact steps).
 4. `@prisma/client`/`pg`/`prisma` are already in Next.js's default `serverExternalPackages` list, and `postinstall` runs `prisma generate` — no extra Vercel build configuration is needed for Prisma itself.
 5. Apply migrations against the production database once, before or during first deploy: `npm run db:deploy` (never `db:push` in production).
 6. Deploy.
@@ -169,7 +173,7 @@ This has **not** been deployed to Vercel as part of this work — the steps abov
 ## 11. Known Limitations (Phase 1)
 
 - Rate limiting is in-memory only (see Security above).
-- Email delivery requires `RESEND_API_KEY`/`EMAIL_FROM`; without them, everything (auth links and all 3 form flows) is logged to the server console, not emailed — see §7 for what's needed to activate real sending.
+- Email delivery requires all 5 `SMTP_*` variables (`SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_PASS`/`SMTP_FROM`); without them, everything (auth links and all 3 form flows) is logged to the server console, not emailed — see §7 for what's needed to activate real sending.
 - `requireEmailVerification` is off by default (see Authentication Architecture above).
 - Admin user management is read-only; enquiry/message status updates are the only admin write actions in this phase.
 - No LMS, payments, certificates, or advanced CMS — intentionally out of scope; the schema and route structure are designed not to require a rewrite when those are added.
