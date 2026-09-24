@@ -16,11 +16,27 @@ const inter = Inter({
   weight: ["400", "500", "600"],
 });
 
+const title = "SLSSDTR | School of Life Science – Skill Development, Training & Research";
+const description =
+  "SLSSDTR bridges academia and industry through industry-aligned skill development, training, research and AI transformation programs for the life sciences ecosystem.";
+
 export const metadata: Metadata = {
-  title: "SLSSDTR | School of Life Science – Skill Development, Training & Research",
-  description:
-    "SLSSDTR bridges academia and industry through industry-aligned skill development, training, research and AI transformation programs for the life sciences ecosystem.",
+  title,
+  description,
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
+  openGraph: {
+    title,
+    description,
+    siteName: "SLSSDTR",
+    type: "website",
+    images: ["/logo/slssdtr-logo.png"],
+  },
+  twitter: {
+    card: "summary",
+    title,
+    description,
+    images: ["/logo/slssdtr-logo.png"],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

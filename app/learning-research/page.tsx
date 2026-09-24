@@ -4,6 +4,7 @@ import {
   ArrowRight,
   BookOpen,
   Building2,
+  CheckCircle2,
   Clock,
   Database,
   Dna,
@@ -245,14 +246,26 @@ export default function LearningResearchPage() {
       </section>
 
       {/* Strategic Brief */}
-      <section className="bg-grey py-16 sm:py-20 lg:py-24">
+      <section id="strategic-brief" className="scroll-mt-24 bg-grey py-16 sm:py-20 lg:py-24">
         <Container className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-6">
             <SectionHeading
               eyebrow="Resource"
               title="Why India Needs AI Training & Education — And Why It Must Be 'Train the Trainer'"
-              description="A strategic brief on building AI capability at scale across India's life sciences ecosystem. Share a few details to receive your copy."
+              description="A strategic brief on the regulatory shift making AI training mandatory across Indian life-science education, and why a Train-the-Trainer model is the only way to close the resulting capability gap at scale. Share a few details to receive your copy."
             />
+            <ul className="flex flex-col gap-3">
+              {[
+                "The Pharmacy Council of India (PCI) has mandated AI, data analytics and automation across all eight semesters of the revised B.Pharm syllabus, effective the 2026–27 academic session.",
+                "The addressable base spans 1,700+ pharmacy colleges, 3,000+ other life-science institutions, 5,000+ pharmaceutical companies and 70,000+ hospitals.",
+                "Direct, one-cohort-at-a-time training cannot reach that scale — a certified Train-the-Trainer model can.",
+              ].map((point) => (
+                <li key={point} className="flex items-start gap-3 text-sm leading-relaxed text-ink">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green" strokeWidth={2} aria-hidden="true" />
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div className="rounded-card border border-navy/10 bg-white p-7 shadow-sm sm:p-9">
