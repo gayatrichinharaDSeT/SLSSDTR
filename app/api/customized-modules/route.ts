@@ -1,7 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@/lib/email";
+import { customizedModuleUserEmail, customizedModuleAdminEmail } from "@/lib/email/templates";
 import { getApiUser } from "@/lib/permissions";
 import { customizedModuleRequestSchema } from "@/lib/validations/customized-module";
+import { getProgramBySlug } from "@/data/programs";
 import { apiError, apiInternalError, apiSuccess } from "@/lib/api-response";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
@@ -40,14 +42,25 @@ export async function POST(request: Request) {
       },
     });
 
-    const notifyTo = process.env.CONTACT_NOTIFICATION_EMAIL;
-    if (notifyTo) {
-      sendEmail({
-        to: notifyTo,
-        subject: `New customized module request from ${name}`,
-        text: `${name} (${email}) requested a customized module.\n\nDepartments: ${departments.join(", ")}\nProgram: ${programId || "—"}\n\n${message || ""}`,
-        html: `<p><strong>${name}</strong> (${email}) requested a customized module.</p><p>Departments: ${departments.join(", ")}<br/>Program: ${programId || "—"}</p><p>${message || ""}</p>`,
-      }).catch((error) => console.error("[customized-module] notification email failed:", error));
+    const moduleDetails = {
+      name,
+      email,
+      phone,
+      organization,
+      programName: programId ? (getProgramBySlug(programId)?.name ?? programId) : null,
+      departments,
+      message,
+    };
+
+    sendEmail(customizedModuleUserEmail(moduleDetails)).catch((error) =>
+      console.error("[customized-module] confirmation email failed:", error)
+    );
+
+    const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
+    if (adminEmail) {
+      sendEmail(customizedModuleAdminEmail(moduleDetails, adminEmail)).catch((error) =>
+        console.error("[customized-module] admin notification email failed:", error)
+      );
     }
 
     return apiSuccess({ id: request_.id }, { status: 201 });

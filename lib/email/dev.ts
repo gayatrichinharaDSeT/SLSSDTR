@@ -6,8 +6,9 @@ import type { EmailProvider } from "./types";
 export const devEmailProvider: EmailProvider = {
   name: "dev-console",
   async send(message) {
+    const replyToLine = message.replyTo ? ` (reply-to: ${message.replyTo})` : "";
     console.log(
-      `[email:dev] Would send to ${message.to} — "${message.subject}"\n${message.text}`
+      `[email:dev] Would send to ${message.to}${replyToLine} — "${message.subject}"\n${message.text}`
     );
   },
 };

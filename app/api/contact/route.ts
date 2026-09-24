@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@/lib/email";
+import { contactUserEmail, contactAdminEmail } from "@/lib/email/templates";
 import { contactMessageSchema } from "@/lib/validations/contact";
 import { apiError, apiInternalError, apiSuccess } from "@/lib/api-response";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
@@ -37,17 +38,20 @@ export async function POST(request: Request) {
       },
     });
 
-    // The enquiry is already saved at this point — a failed notification
-    // email must never lose it, so this is fire-and-forget with its own
-    // catch rather than something the request awaits and fails on.
-    const notifyTo = process.env.CONTACT_NOTIFICATION_EMAIL;
-    if (notifyTo) {
-      sendEmail({
-        to: notifyTo,
-        subject: `New contact enquiry from ${name}`,
-        text: `${name} (${email}) submitted a contact form message.\n\nInterest: ${interest || "—"}\nOrganization: ${organization || "—"}\nPhone: ${phone || "—"}\n\n${message}`,
-        html: `<p><strong>${name}</strong> (${email}) submitted a contact form message.</p><p>Interest: ${interest || "—"}<br/>Organization: ${organization || "—"}<br/>Phone: ${phone || "—"}</p><p>${message}</p>`,
-      }).catch((error) => console.error("[contact] notification email failed:", error));
+    // The message is already saved at this point — a failed notification
+    // email must never lose it, so both sends are fire-and-forget with
+    // their own catch rather than something the request awaits and fails on.
+    const contactDetails = { name, email, phone, organization, interest, message };
+
+    sendEmail(contactUserEmail(contactDetails)).catch((error) =>
+      console.error("[contact] confirmation email failed:", error)
+    );
+
+    const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
+    if (adminEmail) {
+      sendEmail(contactAdminEmail(contactDetails, adminEmail)).catch((error) =>
+        console.error("[contact] admin notification email failed:", error)
+      );
     }
 
     return apiSuccess({ id: contactMessage.id }, { status: 201 });

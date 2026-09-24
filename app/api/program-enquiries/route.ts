@@ -1,7 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@/lib/email";
+import { programEnquiryUserEmail, programEnquiryAdminEmail } from "@/lib/email/templates";
 import { getApiUser } from "@/lib/permissions";
 import { programEnquirySchema } from "@/lib/validations/enquiry";
+import { getProgramBySlug } from "@/data/programs";
 import { apiError, apiInternalError, apiSuccess } from "@/lib/api-response";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
@@ -45,14 +47,21 @@ export async function POST(request: Request) {
       },
     });
 
-    const notifyTo = process.env.CONTACT_NOTIFICATION_EMAIL;
-    if (notifyTo) {
-      sendEmail({
-        to: notifyTo,
-        subject: `New program enquiry: ${programId}`,
-        text: `${name} (${email}) enquired about ${programId}.\n\nOrganization: ${organization || "—"}\nPhone: ${phone || "—"}\n\n${message}`,
-        html: `<p><strong>${name}</strong> (${email}) enquired about <strong>${programId}</strong>.</p><p>Organization: ${organization || "—"}<br/>Phone: ${phone || "—"}</p><p>${message}</p>`,
-      }).catch((error) => console.error("[program-enquiry] notification email failed:", error));
+    // The enquiry is already saved at this point — email is best-effort and
+    // must never fail an otherwise successful submission, so both sends are
+    // fire-and-forget with their own catch.
+    const programName = getProgramBySlug(programId)?.name ?? programId;
+    const enquiryDetails = { name, email, phone, organization, programName, preferredBatch, message };
+
+    sendEmail(programEnquiryUserEmail(enquiryDetails)).catch((error) =>
+      console.error("[program-enquiry] confirmation email failed:", error)
+    );
+
+    const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
+    if (adminEmail) {
+      sendEmail(programEnquiryAdminEmail(enquiryDetails, adminEmail)).catch((error) =>
+        console.error("[program-enquiry] admin notification email failed:", error)
+      );
     }
 
     return apiSuccess({ id: enquiry.id }, { status: 201 });

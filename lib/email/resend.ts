@@ -20,6 +20,7 @@ export function createResendProvider(apiKey: string, from: string): EmailProvide
           subject: message.subject,
           html: message.html,
           text: message.text,
+          ...(message.replyTo ? { reply_to: message.replyTo } : {}),
         }),
       });
 
