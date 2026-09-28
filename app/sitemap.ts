@@ -13,6 +13,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/team",
     "/contact",
     "/customized-modules",
+    "/privacy-policy",
+    "/terms",
   ];
 
   const programRoutes = programs.map((program) => `/programs/${program.slug}`);

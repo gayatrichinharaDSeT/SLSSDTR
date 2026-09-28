@@ -70,8 +70,16 @@ export default function Footer() {
       </Reveal>
 
       <div className="relative border-t border-white/10">
-        <Container className="flex flex-col items-center justify-between gap-2 py-4 text-xs text-white/50 sm:flex-row">
+        <Container className="flex flex-col items-center justify-between gap-3 py-4 text-xs text-white/50 sm:flex-row">
           <p>© {site.copyrightYear} SLSSDTR. All rights reserved.</p>
+          <div className="flex items-center gap-4">
+            <Link href="/privacy-policy" className="hover:text-yellow">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="hover:text-yellow">
+              Terms of Service
+            </Link>
+          </div>
           <p>School of Life Sciience – Skill Development, Training & Research</p>
         </Container>
       </div>
