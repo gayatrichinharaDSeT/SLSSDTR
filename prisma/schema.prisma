@@ -1,12 +1,12 @@
 // SLSSDTR — backend foundation schema (PostgreSQL via Prisma 7)
 //
 // Scope for this phase: authentication (Better Auth), contact messages,
-// program enquiries (with DSeT-attribution fields prepared but not yet
-// wired to a confirmed integration), customized-module requests, and a
-// database-backed batch list. Deliberately excludes LMS/course/payment
-// models — see ProgramEnquiry.programId and Batch.programId comments for
-// how a future Program/Enrollment/Payment layer attaches without a
-// rewrite.
+// program enquiries, customized-module requests, a database-backed batch
+// list, and paid program registrations (ProgramRegistration) proxied
+// through DSet Academy's own Razorpay account — see that model's comment
+// for how payment actually flows and why no Razorpay secret lives in this
+// codebase. Deliberately still excludes a full LMS/course/enrollment
+// layer beyond what registration needs.
 
 generator client {
   provider = "prisma-client-js"
@@ -64,6 +64,12 @@ enum CompanyType {
   OTHERS
 }
 
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
 model User {
   id            String  @id @default(cuid())
   name          String
@@ -102,6 +108,7 @@ model User {
   accounts                 Account[]
   programEnquiries         ProgramEnquiry[]
   customizedModuleRequests CustomizedModuleRequest[]
+  programRegistrations     ProgramRegistration[]
 
   @@map("user")
 }
@@ -260,4 +267,46 @@ model Batch {
 
   @@index([isActive])
   @@map("batch")
+}
+
+// A paid program registration. Payment is proxied through DSet Academy's
+// own Razorpay account (see lib/academy-api.ts) — this app never holds a
+// Razorpay secret and never writes to DSet's own orders/payments tables;
+// DSet's API tags every charge it processes for us as our own
+// (`provider_account: "SLSSDTR"`) entirely on their side. This table only
+// tracks *our* view of that same registration so our own dashboard/admin
+// panel can show its status, independent of DSet's system.
+model ProgramRegistration {
+  id           String        @id @default(cuid())
+  programId    String
+  name         String
+  email        String
+  phone        String
+  organization String?
+  preferredBatch String?
+  // Rupees × 100, matching Razorpay's paise convention and the amount
+  // actually sent to DSet's create-order call — never trust a client-
+  // supplied amount; this is always derived server-side from
+  // data/programs.ts at creation time.
+  amount   Int
+  currency String        @default("INR")
+  status   PaymentStatus @default(PENDING)
+
+  // DSet Academy / Razorpay identifiers, populated as the flow progresses.
+  internalOrderId   String  @unique // DSet's own "ord_..." id
+  providerOrderId   String? // Razorpay's "order_..." id
+  providerPaymentId String? // Razorpay's "pay_..." id, set once paid
+  paidAt            DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Nullable: guest visitors can register without an account.
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([programId])
+  @@index([status])
+  @@map("program_registration")
 }

@@ -6,8 +6,10 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import EnquireButton from "@/components/programs/EnquireButton";
+import RegisterButton from "@/components/programs/RegisterButton";
 import { formatProgramPrice, type Program } from "@/data/programs";
 import { getActiveBatches } from "@/lib/batches";
+import { isAcademyApiConfigured } from "@/lib/academy-api";
 
 type ProgramDetailProps = {
   program: Program;
@@ -19,6 +21,13 @@ const FACT_LABELS = ["Duration", "Format", "Investment"] as const;
 export default async function ProgramDetail({ program, children }: ProgramDetailProps) {
   const facts = [program.duration, program.format, formatProgramPrice(program.price)];
   const batches = await getActiveBatches();
+  // DSet Academy hasn't confirmed a production base URL yet — showing
+  // "Register & Pay" to real visitors before then would be a guaranteed
+  // dead end. Program pages are statically prerendered, so this is
+  // evaluated at build time — once DSET_ACADEMY_API_BASE_URL/
+  // DSET_ACADEMY_API_TOKEN are set, a normal redeploy (same as any other
+  // env var change) is enough to make the button appear.
+  const paymentsEnabled = isAcademyApiConfigured();
 
   return (
     <>
@@ -164,6 +173,9 @@ export default async function ProgramDetail({ program, children }: ProgramDetail
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
               <EnquireButton programId={program.slug} programName={program.name} batches={batches} />
+              {paymentsEnabled ? (
+                <RegisterButton programId={program.slug} programName={program.name} batches={batches} />
+              ) : null}
               <Button href="/contact" variant="secondary">
                 Contact Us
               </Button>
