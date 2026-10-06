@@ -7,7 +7,6 @@ const links = [
   { label: "Overview", href: "/admin" },
   { label: "Users", href: "/admin/users" },
   { label: "Enquiries", href: "/admin/enquiries" },
-  { label: "Registrations", href: "/admin/registrations" },
   { label: "Customized Modules", href: "/admin/customized-modules" },
   { label: "Messages", href: "/admin/messages" },
 ];

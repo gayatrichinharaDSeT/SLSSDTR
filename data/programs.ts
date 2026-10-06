@@ -14,6 +14,12 @@ export type Program = {
   slug: string;
   name: string;
   shortName: string;
+  // The matching program's slug on DSet Academy's own registration site
+  // (confirmed with DSet — only this one program is named differently
+  // there: "Train the Trainer" here is "AI Educator Mastery Program"
+  // there, hence "ai-educator-mastery"). Used to build the "Register for
+  // this cohort" link — see lib/academy-redirect.ts.
+  academySlug: string;
   flagship?: boolean;
   summary: string;
   description: string;
@@ -34,6 +40,7 @@ export const programs: Program[] = [
     slug: "student-ai",
     name: "Student AI Mastery",
     shortName: "Student AI Mastery",
+    academySlug: "pharmaai-student",
     summary:
       "3-weekend hands-on AI certification for Pharmacy, Pharmaceutical Sciences and Life Science students — research intelligence, drug discovery applications and an AI-ready career profile.",
     description:
@@ -82,6 +89,7 @@ export const programs: Program[] = [
     slug: "faculty-ai",
     name: "Faculty AI Mastery",
     shortName: "Faculty AI Mastery",
+    academySlug: "ai-faculty-mastery",
     summary:
       "3-weekend hands-on faculty development program for Pharmacy and Life Science educators — AI-powered teaching, research and academic productivity.",
     description:
@@ -129,6 +137,7 @@ export const programs: Program[] = [
     slug: "professional-ai",
     name: "Professional AI Mastery",
     shortName: "Professional AI Mastery",
+    academySlug: "ai-mastery-life-science-healthcare",
     summary:
       "24-hour AI Mastery Program for Life Science & Healthcare Professionals — 40+ AI tools mapped to the 18 departments that run Life Science and Healthcare organisations.",
     description:
@@ -176,6 +185,7 @@ export const programs: Program[] = [
     slug: "train-the-trainer",
     name: "Train the Trainer",
     shortName: "Train the Trainer",
+    academySlug: "ai-educator-mastery",
     flagship: true,
     summary:
       "Become a certified AI faculty-cum-trainer for Life Science & Healthcare — 60+ AI tools mapped to 18 departments, followed by paid training assignments.",
@@ -223,6 +233,7 @@ export const programs: Program[] = [
     slug: "entrepreneur-ai",
     name: "Entrepreneur Mastery",
     shortName: "Entrepreneur Mastery",
+    academySlug: "entrepreneur-mastery",
     summary:
       "Lead AI adoption across your organisation and your venture in Life Science & Healthcare — 60+ AI tools mapped to 18 business departments.",
     description:
@@ -268,6 +279,14 @@ export const programs: Program[] = [
 
 export function getProgramBySlug(slug: string): Program | undefined {
   return programs.find((program) => program.slug === slug);
+}
+
+// Reverse of academySlug — used when DSet Academy redirects a visitor back
+// after a confirmed registration/payment (see
+// app/registration-confirmed/page.tsx) and tells us which of their
+// programs it was for.
+export function getProgramByAcademySlug(academySlug: string): Program | undefined {
+  return programs.find((program) => program.academySlug === academySlug);
 }
 
 // ProgramEnquiry.programId also carries non-program lead sources (e.g. a

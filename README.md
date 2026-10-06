@@ -138,33 +138,9 @@ All 5 `SMTP_*` variables must be set together — the app falls back to the dev-
 
 Until all five `SMTP_*` variables are set, the system keeps working exactly as it does today — submissions save to the database normally, and `lib/email/dev.ts` logs what each email would have said to the server console instead of sending it.
 
-## 8. Payments
+## 8. Payments & Registration
 
-Registrations that involve payment (`ProgramRegistration`, one per program registration attempt) are processed through **DSet Academy's own Razorpay account**, via a proxy API DSet built for this app — **this codebase never holds a Razorpay secret and never writes to DSet's own `orders`/`payments` tables.** DSet tags every charge made through these endpoints as ours (`provider_account: "SLSSDTR"`) entirely on their side.
-
-Implemented in:
-- `lib/academy-api.ts` — the only place that calls DSet's API. Three typed functions: `createAcademyOrder`, `verifyAcademyPayment`, `getAcademyOrderStatus`. Throws a distinct `AcademyApiError` (never leaks the bearer token) if the API isn't configured or a call fails.
-- `lib/validations/registration.ts` — Zod schemas for starting and verifying a registration.
-- `lib/razorpay-checkout.ts` — client-side loader for Razorpay's own Checkout widget (their script renders the actual card/UPI/etc. form; this app never builds its own payment form).
-- `app/api/payments/create-order/route.ts` — looks up the program's real price from `data/programs.ts` (never trusts a client-supplied amount), calls DSet's `create-order`, and creates a `ProgramRegistration` row (`PENDING`).
-- `app/api/payments/verify/route.ts` — called after Razorpay Checkout completes; forwards the result to DSet's `verify-payment`, and marks the registration `PAID`/`FAILED` accordingly.
-- `app/admin/registrations/page.tsx` + `app/api/admin/registrations/**` — admin list of all registrations, filterable by status.
-- **Reconciliation gap**: if a visitor closes the tab right after paying (before the verify-payment call completes), DSet's own webhook still marks the payment `paid` on their side, but our `ProgramRegistration` row can stay stuck `PENDING`. `RegistrationRecheckButton` (in `/admin/registrations`) calls `app/api/admin/registrations/[id]/recheck/route.ts`, which pulls DSet's authoritative status via `getAcademyOrderStatus` and syncs it here. Admin-only, on-demand — there's no background job/cron in this deployment to do this automatically.
-
-### Environment variables required
-
-| Variable | Notes |
-|---|---|
-| `DSET_ACADEMY_API_BASE_URL` | DSet Academy's backend base URL. Not finalized as of this integration — confirm the production value with DSet before setting it. |
-| `DSET_ACADEMY_API_TOKEN` | The shared Bearer token DSet issued for this integration. Server-side only. |
-
-Both must be set for real payment to work. Until then, the "Register & Pay" button doesn't render at all (`ProgramDetail.tsx` checks `isAcademyApiConfigured()` and hides it) — this avoids showing real visitors a payment option that's guaranteed to fail. Program pages are statically prerendered, so this check runs at build time: after setting both variables in Vercel, a normal redeploy is what makes the button appear, same as any other env var change. The `keyId` used to open Razorpay Checkout is returned fresh by DSet on every `create-order` call — DSet's `rzp_test_...` key is what's active today; when they switch their backend to a live key, no code change is needed for that part.
-
-### What's still needed to go live
-
-1. **DSet's production base URL** for `DSET_ACADEMY_API_BASE_URL`.
-2. Confirmation from DSet that they've switched their side to a **live** Razorpay key (not `rzp_test_...`) when actually ready to accept real payments.
-3. A full end-to-end test transaction against DSet's real backend once the base URL is available — this integration has been built and code-reviewed against DSet's documented API contract, but **has not yet been exercised against their live endpoints**, since no reachable base URL exists yet.
+Paid registration for the five programs happens entirely on **DSet Academy's own website** — this site does not run its own checkout or hold any Razorpay credentials. Each program's "Register for this cohort" action links out to DSet Academy's registration page for that specific program, where the visitor fills DSet's own form and pays via DSet's own Razorpay integration. (An earlier, more complex approach — a proxy API this app called server-to-server, with its own `ProgramRegistration` table — was built and then superseded by this simpler link-out approach; it was fully removed, including its database table, before DSet's production URL was ever used in production.)
 
 ## 9. Security
 
@@ -184,16 +160,12 @@ Both must be set for real payment to work. Until then, the "Register & Pay" butt
 | `/api/admin/users` | GET | Admin only |
 | `/api/admin/enquiries` | GET/PATCH | Admin only |
 | `/api/admin/messages` | GET/PATCH | Admin only |
-| `/api/payments/create-order` | POST | Public (guest or signed-in), rate-limited |
-| `/api/payments/verify` | POST | Public (guest or signed-in), rate-limited |
-| `/api/admin/registrations` | GET | Admin only |
-| `/api/admin/registrations/[id]/recheck` | POST | Admin only |
 
 ## 11. Vercel Deployment
 
 1. Push this repository to Git and import it into Vercel.
 2. Provision PostgreSQL (Vercel Marketplace → Prisma Postgres/Neon, or your own Neon/Supabase project) and copy its connection string.
-3. In Vercel's project settings, set: `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` (your production URL), `NEXT_PUBLIC_APP_URL` (same), and optionally `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` / `SMTP_FROM` / `ADMIN_NOTIFICATION_EMAIL` (see §7) and `DSET_ACADEMY_API_BASE_URL` / `DSET_ACADEMY_API_TOKEN` (see §8) for exact steps.
+3. In Vercel's project settings, set: `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` (your production URL), `NEXT_PUBLIC_APP_URL` (same), and optionally `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` / `SMTP_FROM` / `ADMIN_NOTIFICATION_EMAIL` (see §7).
 4. `@prisma/client`/`pg`/`prisma` are already in Next.js's default `serverExternalPackages` list, and `postinstall` runs `prisma generate` — no extra Vercel build configuration is needed for Prisma itself.
 5. Apply migrations against the production database once, before or during first deploy: `npm run db:deploy` (never `db:push` in production).
 6. Deploy.
@@ -208,5 +180,5 @@ This project is deployed to the `slssdtr` Vercel project (`https://slssdtr.verce
 - Email delivery requires all 5 `SMTP_*` variables (`SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_PASS`/`SMTP_FROM`); without them, everything (auth links and all 3 form flows) is logged to the server console, not emailed — see §7 for what's needed to activate real sending.
 - `requireEmailVerification` is off by default (see Authentication Architecture above).
 - Admin user management is read-only; enquiry/message/registration status updates are the only admin write actions in this phase.
-- Payments (§8) are code-complete but not yet exercised against DSet Academy's live backend — no base URL has been provided yet.
+- Registration/payment for the five programs is handled entirely on DSet Academy's own site (§8) — their production URL isn't live yet, so the "Register for this cohort" links don't have a real destination to point to as of this writing.
 - No LMS, certificates, or advanced CMS — intentionally out of scope; the schema and route structure are designed not to require a rewrite when those are added.

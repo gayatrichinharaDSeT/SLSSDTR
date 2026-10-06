@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Download, Eye, Star } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Download, Eye, Star } from "lucide-react";
 import Badge from "@/components/ui/Badge";
 import ProgramLeadModal from "@/components/programs/ProgramLeadModal";
 import type { Program } from "@/data/programs";
+import { getAcademyRegistrationUrl } from "@/lib/academy-redirect";
 
 type ProgramCardProps = {
   program: Program;
@@ -12,6 +13,7 @@ type ProgramCardProps = {
 
 export default function ProgramCard({ program }: ProgramCardProps) {
   const [leadModalOpen, setLeadModalOpen] = useState(false);
+  const registrationUrl = getAcademyRegistrationUrl(program.academySlug);
 
   return (
     <div
@@ -40,7 +42,14 @@ export default function ProgramCard({ program }: ProgramCardProps) {
         ))}
       </ul>
 
-      <div className="mt-auto flex items-center justify-between gap-3">
+      <div className="mt-auto flex items-baseline gap-2">
+        <span className="font-heading text-2xl font-extrabold text-navy">
+          ₹{program.price.amount.toLocaleString("en-IN")}
+        </span>
+        <span className="text-xs text-ink/60">incl. {program.price.gstRate}% GST</span>
+      </div>
+
+      <div className="flex items-center justify-between gap-3">
         <button
           type="button"
           onClick={() => setLeadModalOpen(true)}
@@ -73,6 +82,19 @@ export default function ProgramCard({ program }: ProgramCardProps) {
           </a>
         </div>
       </div>
+
+      {registrationUrl ? (
+        <a
+          href={registrationUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(event) => event.stopPropagation()}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-btn bg-navy px-5 py-2.5 text-sm font-semibold font-heading text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-green hover:shadow-lg hover:shadow-green/20"
+        >
+          Register for this cohort
+          <ArrowUpRight className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+        </a>
+      ) : null}
 
       {leadModalOpen ? (
         <ProgramLeadModal
