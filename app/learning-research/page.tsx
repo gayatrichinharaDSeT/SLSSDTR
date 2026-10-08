@@ -245,6 +245,36 @@ export default function LearningResearchPage() {
         </Container>
       </section>
 
+      {/* Podcast */}
+      <section className="bg-white py-16 sm:py-20 lg:py-24">
+        <Container className="flex flex-col gap-10">
+          <SectionHeading
+            eyebrow="Podcast"
+            title="Podcast 1: The AI Training Trap"
+            description="A conversation on where AI training efforts go wrong — and what to do instead. Available in English and Hindi, plus a short highlights reel."
+            align="center"
+            className="mx-auto max-w-2xl"
+          />
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { src: "/Podcast-1-AI-Training-Trap/English.mp4", label: "English" },
+              { src: "/Podcast-1-AI-Training-Trap/Hindi.mp4", label: "Hindi" },
+              { src: "/Podcast-1-AI-Training-Trap/Reel.mp4", label: "Highlights Reel" },
+            ].map((episode) => (
+              <div key={episode.src} className="flex flex-col gap-3 rounded-card border border-navy/10 bg-white p-4">
+                <div className="overflow-hidden rounded-btn bg-navy">
+                  <video controls preload="metadata" className="aspect-video w-full">
+                    <source src={episode.src} type="video/mp4" />
+                  </video>
+                </div>
+                <span className="font-heading text-sm font-bold text-navy">{episode.label}</span>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
       {/* Strategic Brief */}
       <section id="strategic-brief" className="scroll-mt-24 bg-grey py-16 sm:py-20 lg:py-24">
         <Container className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">

@@ -1,9 +1,8 @@
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import Container from "@/components/ui/Container";
-import PageHero from "@/components/ui/PageHero";
+import AdminHeader from "@/components/admin/AdminHeader";
 import AdminNav from "@/components/admin/AdminNav";
-import LogoutButton from "@/components/dashboard/LogoutButton";
 import { requireAdmin } from "@/lib/permissions";
 import { isAdminPanelEnabled } from "@/lib/feature-flags";
 
@@ -23,11 +22,9 @@ export default async function AdminLayout({ children }: { children: ReactNode })
 
   return (
     <>
-      <PageHero eyebrow="ADMIN" title="SLSSDTR Admin" description={admin.email}>
-        <LogoutButton />
-      </PageHero>
-      <section className="bg-white pb-16 sm:pb-20 lg:pb-24">
-        <Container className="flex flex-col gap-8">
+      <AdminHeader email={admin.email} role={admin.role} />
+      <section className="bg-grey/40 pb-16 sm:pb-20 lg:pb-24">
+        <Container className="flex flex-col gap-6 pt-6 sm:pt-8">
           <AdminNav />
           {children}
         </Container>

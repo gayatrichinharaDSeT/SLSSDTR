@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FileText } from "lucide-react";
+import { Download, FileText } from "lucide-react";
 import EmptyState from "@/components/dashboard/EmptyState";
 import EnquiryStatusSelect from "@/components/admin/EnquiryStatusSelect";
 import { prisma } from "@/lib/prisma";
@@ -32,9 +32,21 @@ export default async function AdminEnquiriesPage({ searchParams }: PageProps) {
     include: { user: { select: { name: true, email: true } } },
   });
 
+  const exportHref = validStatus ? `/api/admin/enquiries/export?status=${validStatus}` : "/api/admin/enquiries/export";
+
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="font-heading text-xl font-bold text-navy">Program Enquiries</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="font-heading text-xl font-bold text-navy">Program Enquiries</h1>
+        <a
+          href={exportHref}
+          download
+          className="inline-flex items-center gap-2 rounded-btn bg-navy px-4 py-2 text-sm font-semibold font-heading text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-green hover:shadow-lg hover:shadow-green/20"
+        >
+          <Download className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+          Export to Excel
+        </a>
+      </div>
 
       <div className="flex flex-wrap gap-2">
         {FILTERS.map((filter) => (
